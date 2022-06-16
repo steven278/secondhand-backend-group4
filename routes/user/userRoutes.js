@@ -7,9 +7,9 @@ router.post('/login', userController.login);
 router.post('/register', userController.register);
 
 
-router.get('/:id', profileController.read);
-router.post('/', profileController.add)
-router.put('/:id', profileController.update);
+router.get('/:id', userController.read);
+router.post('/', userController.add)
+router.put('/:id', userController.update);
 
 
 module.exports = router;
