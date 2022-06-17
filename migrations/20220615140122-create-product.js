@@ -28,18 +28,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      photo1: {
+      photos: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      photo2: {
-        type: Sequelize.STRING
-      },
-      photo3: {
-        type: Sequelize.STRING
-      },
-      photo4: {
-        type: Sequelize.STRING
+        type: Sequelize.ARRAY(Sequelize.STRING)
       },
       isSold: {
         type: Sequelize.BOOLEAN
