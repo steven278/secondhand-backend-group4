@@ -18,7 +18,6 @@ const uploadWithCloudinary = async (req, res, next) => {
             });
             photos.push(uploadResult.secure_url);
         }
-        console.log(photos)
         req.body.photos = photos;
         next();
     } catch (err) {

@@ -2,7 +2,7 @@ const { check, validationResult } = require('express-validator');
 
 const productValidation = () => {
     return [
-        check('user_id').isNumeric().withMessage('must be a number'),
+        check('seller_id').isNumeric().withMessage('must be a number'),
         check('name').isLength({ min: 2 }).withMessage('must be at least 2 chars long'),
         check('price').isNumeric().withMessage('must be a number'),
         check('category_id').isNumeric().withMessage('must be a number'),
