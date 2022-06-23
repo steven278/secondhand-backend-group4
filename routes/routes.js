@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const products = require('./product.routes');
+const transactions = require('./transaction.routes');
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -9,6 +10,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.use('/products', products);
+router.use('/transactions', transactions);
 
 router.use((err, req, res, next) => {
     if (err.name === 'SequelizeDatabaseError' || err.name === 'SequelizeUniqueConstraintError' || err.name === 'ReferenceError' || err.name === 'SequelizeForeignKeyConstraintError') {

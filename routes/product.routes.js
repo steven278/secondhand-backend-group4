@@ -1,15 +1,12 @@
 const router = require('express').Router();
 const upload = require('../helper/multer');
 const uploadWithCloudinary = require('../helper/cloudinary');
-const getAll = require('../controllers/products/getAll');
-const getById = require('../controllers/products/getById');
-const create = require('../controllers/products/create');
-const update = require('../controllers/products/update');
+const { getAllProduct, getProductById, createProduct, updateProduct } = require('../controllers/products.controller');
 const { productValidation, productUpdateValidation, validate } = require('../validation/product.validator');
 
-router.get('/', getAll);
-router.get('/:id', getById);
-router.post('/', upload.array('photos', 4), productValidation(), validate, uploadWithCloudinary, create);
-router.put('/:id', upload.array('photos', 4), productUpdateValidation(), validate, uploadWithCloudinary, update);
+router.get('/', getAllProduct);
+router.get('/:id', getProductById);
+router.post('/', upload.array('photos', 4), productValidation(), validate, uploadWithCloudinary, createProduct);
+router.put('/:id', upload.array('photos', 4), productUpdateValidation(), validate, uploadWithCloudinary, updateProduct);
 
 module.exports = router;

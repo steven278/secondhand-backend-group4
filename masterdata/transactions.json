@@ -1,0 +1,19 @@
+[{
+        "buyer_id": 1,
+        "product_id": 1,
+        "nego_price": 10000,
+        "price": null
+    },
+    {
+        "buyer_id": 2,
+        "product_id": 1,
+        "nego_price": 8000,
+        "price": null
+    },
+    {
+        "buyer_id": 2,
+        "product_id": 2,
+        "nego_price": 5000,
+        "price": null
+    }
+]
