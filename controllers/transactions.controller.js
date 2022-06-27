@@ -1,8 +1,10 @@
-const { Transaction } = require('../models');
+const { Transaction, Product } = require('../models');
+const { Op } = require("sequelize");
+
 
 const getAllTransactions = async (req, res, next) => {
     try {
-        let { page, row } = req.query;
+        let { page, row, seller_id, isSold, trx_price } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -18,7 +20,25 @@ const getAllTransactions = async (req, res, next) => {
             limit: row,
             offset: page
         }
+
+        //get diminati (under progress)
+        if (seller_id && isSold && trx_price) {
+            const attrOption = trx_price === 'null' ? { [Op.is]: null } : trx_price;
+            const products = await Product.findAll({ where: { seller_id, isSold } });
+            // console.log(products.length)
+            const data = [];
+            for (let i = 0; i <= products.length; i++) {
+                // console.log(products[i].id)
+                const transactions = await Transaction.findAll({ where: { price: attrOption, product_id: products[i].id } });
+                // console.log(transactions)
+                data.push(transactions);
+                console.log(data)
+            }
+            console.log(data)
+        }
+
         const data = await Transaction.findAll(options);
+
         if (data.length === 0) {
             throw new Error(`Transaction not found`);
         }
@@ -86,9 +106,6 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
-const getInterestedTransaction = async (req, res, next) => {
-
-}
 module.exports = {
     getAllTransactions,
     getTransactionById,

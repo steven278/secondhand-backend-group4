@@ -96,13 +96,6 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
-// const getProductByCategory = async (req, res, next) => {
-//     try {
-
-//     } catch (err) {
-
-//     }
-// }
 module.exports = {
     getAllProduct,
     getProductById,
