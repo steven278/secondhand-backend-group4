@@ -1,7 +1,8 @@
-const { Product } = require('../models');
+const { Product, Category } = require('../models');
 
 const getAllProduct = async (req, res, next) => {
     try {
+        //pagination
         let { page, row } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
@@ -10,13 +11,20 @@ const getAllProduct = async (req, res, next) => {
         page -= page > 0 ? 1 : 0;
         page *= row;
 
+        //query 
         const options = {
             attributes: [
                 'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished'
             ],
             order: [['id', 'ASC']],
             limit: row,
-            offset: page
+            offset: page,
+        }
+
+        //category filtering
+        if (req.query.category) {
+            const category = await Category.findOne({ where: { name: req.query.category } });
+            options.where = { category_id: category.id };
         }
         const data = await Product.findAll(options);
         if (data.length === 0) {
@@ -88,6 +96,13 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
+// const getProductByCategory = async (req, res, next) => {
+//     try {
+
+//     } catch (err) {
+
+//     }
+// }
 module.exports = {
     getAllProduct,
     getProductById,

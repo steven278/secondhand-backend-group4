@@ -1,0 +1,31 @@
+[{
+        "seller_id": 1,
+        "name": "rolex",
+        "price": 500000,
+        "category_id": 4,
+        "description": "an elegant watch",
+        "photos": [
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656077437/my-asset/jpeg/47cblue3_yvvloq.png",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078392/my-asset/jpeg/DSCF7222_ia1apf.jpg",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078725/my-asset/jpeg/LE1097_5_c9i2ow.jpg",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078732/my-asset/jpeg/5e17efdcc1f259045d9ca716-large_xdecvu.jpg"
+        ],
+        "isSold": false,
+        "isPublished": false
+    },
+    {
+        "seller_id": 2,
+        "name": "porshce",
+        "price": 800000000,
+        "category_id": 2,
+        "description": "a limited edition car",
+        "photos": [
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078409/my-asset/jpeg/FORD_FUSION_2020_p5rzpe.png",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656077726/my-asset/jpeg/Transpo_G70_TA-518126_fnpcce.jpg",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078633/my-asset/jpeg/blue-sedan-car-picture-id512322597_lzoiwc.jpg",
+            "https://res.cloudinary.com/bejs1g4/image/upload/v1656078638/my-asset/jpeg/blue-city-car-blank-surface-260nw-1377855851_nbknmm.jpg"
+        ],
+        "isSold": false,
+        "isPublished": false
+    }
+]

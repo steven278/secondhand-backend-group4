@@ -86,6 +86,9 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
+const getInterestedTransaction = async (req, res, next) => {
+
+}
 module.exports = {
     getAllTransactions,
     getTransactionById,
