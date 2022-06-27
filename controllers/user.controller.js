@@ -28,7 +28,11 @@ const readUserDataById = async (req, res, next) => {
     }
 }
 
+const loginUser = (req, res, next) => {
+    // login the user
+}
 
 module.exports = {
-    readUserDataById
+    readUserDataById,
+    loginUser
 }
