@@ -39,18 +39,18 @@ const registUser = async (req, res, next) => {
         // const { email } = req.body;
         // const greet = `Thank you for registering your account in our website`;
         // const emailResponse = await transportEmail(email, greet);
-        // if (!register) {
-        //     res.status(404).json({
-        //         status: 'fail',
-        //         message: 'cant regist'
-        //     })
-        // } else {
-        //     res.status(201).json({
-        //         status: "success",
-        //         data: register,
-        //         message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
-        //     });
-        // }
+        if (!register) {
+            res.status(404).json({
+                status: 'fail',
+                message: 'cant regist'
+            })
+        } else {
+            res.status(201).json({
+                status: "success",
+                data: clearRegist,
+                // message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
+            });
+        }
 
     } catch (err) {
         next(err);
