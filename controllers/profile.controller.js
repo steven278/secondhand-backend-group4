@@ -1,27 +1,27 @@
 const { profile, user } = require('../models/profile');
 
-const addProfile = async (req, res, next) => {
-    // add the profile user
-    try {
-        const addProfile = await profile.create({
-            // photo: req.file.photo,
-            phone: req.body.phone,
-            address: req.body.address,
-            city: req.body.city
-        })
-        if (!addProfile) {
-            res.status(404).json({
-                message: 'Failed to add data'
-            })
-        } else {
-            res.status(200).json({
-                data: addProfile
-            })
-        }
-    } catch (err) {
-        next(err);
-    }
-}
+// const addProfile = async (req, res, next) => {
+//     // add the profile user
+//     try {
+//         const addProfile = await profile.create({
+//             // photo: req.file.photo,
+//             phone: req.body.phone,
+//             address: req.body.address,
+//             city: req.body.city
+//         })
+//         if (!addProfile) {
+//             res.status(404).json({
+//                 message: 'Failed to add data'
+//             })
+//         } else {
+//             res.status(200).json({
+//                 data: addProfile
+//             })
+//         }
+//     } catch (err) {
+//         next(err);
+//     }
+// }
 
 const readProfile = async (req, res) => {
     // get the profile user
@@ -91,7 +91,6 @@ const updateProfile = async (req, res, next) => {
 }
 
 module.exports = {
-    addProfile,
     readProfile,
     updateProfile
 }
