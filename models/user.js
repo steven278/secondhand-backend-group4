@@ -1,7 +1,8 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -28,6 +29,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    hooks: {
+      beforeCreate: async (User, options) => {
+        User.password = await bcrypt.hash(User.password, +process.env.SALT_ROUNDS);
+        return User;
+      },
+      beforeUpdate: async (User, options) => {
+        User.password = await bcrypt.hash(User.password, +process.env.SALT_ROUNDS);
+        return User;
+      }
+    }
   });
   return User;
 };

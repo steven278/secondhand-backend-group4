@@ -10,7 +10,8 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
       },
       password: {
         allowNull: false,
@@ -21,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       profile_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       isVerified: {
@@ -29,7 +30,7 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       role_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       createdAt: {
