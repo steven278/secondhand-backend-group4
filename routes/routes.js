@@ -9,6 +9,7 @@ router.get('/', (req, res, next) => {
     })
 })
 
+// Route for controller here
 router.use('/user', userRoutes);
 router.use('/profile', profileRoutes);
 
