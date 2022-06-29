@@ -13,6 +13,8 @@ router.get('/', (req, res, next) => {
 router.use('/user', userRoutes);
 router.use('/profile', profileRoutes);
 
+// End Route for controller here
+
 router.use((err, req, res, next) => {
     if (err.name === 'SequelizeDatabaseError' || err.name === 'SequelizeUniqueConstraintError' || err.name === 'ReferenceError' || err.name === 'SequelizeForeignKeyConstraintError') {
         res.status(400).json({
