@@ -1,4 +1,4 @@
-const { profile, user } = require('../models/profile');
+const { Profile, User } = require('../models');
 
 // const addProfile = async (req, res, next) => {
 //     // add the profile user
@@ -26,13 +26,13 @@ const { profile, user } = require('../models/profile');
 const readProfile = async (req, res) => {
     // get the profile user
     try {
-        const profileUser = await profile.findOne({
+        const profileUser = await Profile.findOne({
             where: {
                 id: req.params.id
             },
             attributes: ['id', 'photo', 'phone', 'address', 'city'],
             includes: [{
-                model: user,
+                model: User,
                 where: {
                     email: req.body.email,
                     name: req.body.name
@@ -50,14 +50,13 @@ const readProfile = async (req, res) => {
             })
         }
     } catch (err) {
-        console.log(err);
         next(err);
     }
 }
 
 const updateProfile = async (req, res, next) => {
     try {
-        const updateProfile = await profile.update({
+        const updateProfile = await Profile.update({
             address: req.body.address,
             city: req.body.city,
             phone: req.body.phone,
@@ -65,18 +64,18 @@ const updateProfile = async (req, res, next) => {
         }, { where: { id: req.params.id } })
 
         if (updateProfile) {
-            await user.update({
+            await User.update({
                 name: req.body.name,
                 updatedAt: new Date()
             }, { where: { id: req.params.id } })
         };
 
-        const clearUpdate = await profile.findOne({
+        const clearUpdate = await Profile.findOne({
             where: {
                 id: req.params.id
             },
             include: [{
-                model: user
+                model: User
             }]
         });
 
