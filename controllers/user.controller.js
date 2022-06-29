@@ -1,4 +1,4 @@
-const { user, profile } = require('../models');
+const { User, Profile } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transportEmail = require('../helper/mailer');
@@ -38,20 +38,32 @@ const loginUser = (req, res, next) => {
 
 const registUser = async (req, res, next) => {
     try {
-        const register = await user.create({
+        const register = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
+            profile_id: id,
             isVerified: false
         })
         if (register) {
             await profile.create({
+                profile_id: register.id,
                 photo: NULL,
                 phone: NULL,
                 address: NULL,
                 city: NULL,
             })
-        }
+        };
+
+        const clearRegist = await user.findOne({
+            where: {
+                id: register.id
+            },
+            include: [{
+                model: profile
+            }]
+        })
+
         console.log(register)
         const { email } = req.body;
         const greet = `Thank you for registering your account in our website`;
