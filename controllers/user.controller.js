@@ -38,22 +38,36 @@ const loginUser = (req, res, next) => {
 
 const registUser = async (req, res, next) => {
     try {
-        console.log(req.body)
         const register = await user.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
             isVerified: false
         })
-
+        if (register) {
+            await profile.create({
+                photo: NULL,
+                phone: NULL,
+                address: NULL,
+                city: NULL,
+            })
+        }
+        console.log(register)
         const { email } = req.body;
         const greet = `Thank you for registering your account in our website`;
         const emailResponse = await transportEmail(email, greet);
-        res.status(201).json({
-            status: "success",
-            data: register,
-            message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
-        });
+        if (!register) {
+            res.status(404).json({
+                status: 'fail',
+                message: 'cant regist'
+            })
+        } else {
+            res.status(201).json({
+                status: "success",
+                data: register,
+                message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
+            });
+        }
 
     } catch (err) {
         next(err);
