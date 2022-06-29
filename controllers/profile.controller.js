@@ -1,10 +1,10 @@
-const { profile } = require('../models/profile');
+const { profile, user } = require('../models/profile');
 
 const addProfile = async (req, res, next) => {
     // add the profile user
     try {
         const addProfile = await profile.create({
-            photo: req.body.photo,
+            // photo: req.file.photo,
             phone: req.body.phone,
             address: req.body.address,
             city: req.body.city
@@ -55,7 +55,43 @@ const readProfile = async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res, next) => {
+    try {
+        const updateProfile = await profile.update({
+            address: req.body.address,
+            city: req.body.city,
+            phone: req.body.phone,
+            updatedAt: new Date()
+        }, { where: { id: req.params.id } })
+
+        if (updateProfile) {
+            await user.update({
+                name: req.body.name,
+                updatedAt: new Date()
+            }, { where: { id: req.params.id } })
+        };
+
+        const clearUpdate = await profile.findOne({
+            where: {
+                id: req.params.id
+            },
+            include: [{
+                model: user
+            }]
+        });
+
+        res.status(201).json({
+            status: "Success Updated data",
+            data: clearUpdate
+        })
+
+    } catch (err) {
+        next(err);
+    }
+}
+
 module.exports = {
     addProfile,
-    readProfile
+    readProfile,
+    updateProfile
 }
