@@ -1,4 +1,8 @@
-const { User } = require('../models');
+const { user, profile } = require('../models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const transportEmail = require('../helper/mailer');
+require('dotenv').config();
 
 const readUserDataById = async (req, res, next) => {
     // get the user by id
@@ -32,7 +36,31 @@ const loginUser = (req, res, next) => {
     // login the user
 }
 
+const registUser = async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const register = await user.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+            isVerified: false
+        })
+
+        const { email } = req.body;
+        const greet = `Thank you for registering your account in our website`;
+        const emailResponse = await transportEmail(email, greet);
+        res.status(201).json({
+            status: "success",
+            data: register,
+            message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
+        });
+
+    } catch (err) {
+        next(err);
+    }
+}
 module.exports = {
     readUserDataById,
-    loginUser
+    loginUser,
+    registUser
 }
