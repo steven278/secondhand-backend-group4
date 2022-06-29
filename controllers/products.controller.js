@@ -21,6 +21,11 @@ const getAllProduct = async (req, res, next) => {
             offset: page,
         }
 
+        //get all sold transaction for a user
+        if (req.query.seller_id && req.query.isSold) {
+            options.where = { seller_id: req.query.seller_id, isSold: req.query.isSold };
+        }
+
         //category filtering
         if (req.query.category) {
             const category = await Category.findOne({ where: { name: req.query.category } });
@@ -43,6 +48,10 @@ const getProductById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const options = { where: { id } }
+        if (req.query.isSold) {
+            options.where.isSold = req.query.isSold;
+        }
+        console.log(options);
         const data = await Product.findOne(options);
         if (!data) {
             throw new Error(`failed to get Product by Id`);

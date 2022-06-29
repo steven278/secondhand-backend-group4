@@ -4,6 +4,7 @@
   "description": "Binar Academy Final Project (Backend) - Group 4",
   "main": "index.js",
   "scripts": {
+    "start": "npm start",
     "dev": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
