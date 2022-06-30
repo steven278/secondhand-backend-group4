@@ -4,8 +4,51 @@ const jwt = require('jsonwebtoken');
 const transportEmail = require('../helper/mailer');
 require('dotenv').config();
 
-const loginUser = (req, res, next) => {
+const loginUser = async (req, res, next) => {
     // login the user
+    try {
+        const { email, password } = req.body;
+        const loginUser = await User.findOne(
+            {
+                email: email
+            }
+        )
+        const checkValid = bcrypt.compareSync(password, loginUser.password);
+
+        if (!loginUser) {
+            res.status(404).json({
+                status: 'fail',
+                message: 'Email is not valid'
+            })
+        } else if (!checkValid) {
+            res.status(400).json({
+                status: 'fail',
+                message: 'Invalid password'
+            })
+        }
+
+        if (checkValid) {
+            const payload = {
+                id: loginUser.id,
+                email: loginUser.email,
+                iat: Date.now()
+            }
+
+            const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '3h' });
+
+            res.status(200).json({
+                token: token
+            })
+        } else {
+            res.status(401).json({
+                message: 'Failed Login'
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+        next(err)
+    }
 }
 
 const registUser = async (req, res, next) => {
