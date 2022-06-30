@@ -86,7 +86,7 @@ const createTransaction = async (req, res, next) => {
         if (!data) {
             throw new Error('failed to create transaction');
         }
-        res.status(200).json({
+        res.status(201).json({
             message: 'Transaction created successfully',
             data
         })

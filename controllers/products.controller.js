@@ -72,7 +72,7 @@ const createProduct = async (req, res, next) => {
         if (!data) {
             throw new Error('failed to create product');
         }
-        res.status(200).json({
+        res.status(201).json({
             message: 'Product created successfully',
             data
         })
