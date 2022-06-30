@@ -10,7 +10,9 @@ const loginUser = async (req, res, next) => {
         const { email, password } = req.body;
         const loginUser = await User.findOne(
             {
-                email: email
+                where: {
+                    email: email
+                }
             }
         )
         const checkValid = bcrypt.compareSync(password, loginUser.password);
@@ -44,7 +46,6 @@ const loginUser = async (req, res, next) => {
                 message: 'Failed Login'
             })
         }
-
     } catch (err) {
         console.log(err)
         next(err)
