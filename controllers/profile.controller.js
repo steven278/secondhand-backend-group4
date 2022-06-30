@@ -1,28 +1,5 @@
 const { Profile, User } = require('../models');
 
-// const addProfile = async (req, res, next) => {
-//     // add the profile user
-//     try {
-//         const addProfile = await profile.create({
-//             // photo: req.file.photo,
-//             phone: req.body.phone,
-//             address: req.body.address,
-//             city: req.body.city
-//         })
-//         if (!addProfile) {
-//             res.status(404).json({
-//                 message: 'Failed to add data'
-//             })
-//         } else {
-//             res.status(200).json({
-//                 data: addProfile
-//             })
-//         }
-//     } catch (err) {
-//         next(err);
-//     }
-// }
-
 const readProfile = async (req, res) => {
     // get the profile user
     try {
@@ -31,13 +8,12 @@ const readProfile = async (req, res) => {
                 id: req.params.id
             },
             attributes: ['id', 'photo', 'phone', 'address', 'city'],
-            includes: [{
-                model: User,
-                where: {
-                    email: req.body.email,
-                    name: req.body.name
+            include: [
+                {
+                    model: User,
+                    attributes: ['name']
                 }
-            }]
+            ]
         });
         if (!profileUser) {
             res.status(404).json({
@@ -46,10 +22,12 @@ const readProfile = async (req, res) => {
             })
         } else {
             res.status(200).json({
+                status: 'success',
                 data: profileUser
             })
         }
     } catch (err) {
+        console.log(err)
         next(err);
     }
 }
@@ -69,13 +47,14 @@ const updateProfile = async (req, res, next) => {
                 updatedAt: new Date()
             }, { where: { id: req.params.id } })
         };
-
         const clearUpdate = await Profile.findOne({
             where: {
                 id: req.params.id
             },
+            attributes: ['id', 'photo', 'phone', 'address', 'city'],
             include: [{
-                model: User
+                model: User,
+                attributes: ['name']
             }]
         });
 
