@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const baseUrl = process.env.BASE_URL || '/api/v1.0';
 const { router } = require('./routes/routes');
@@ -9,6 +10,7 @@ const { router } = require('./routes/routes');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+app.use(cors());
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(`${baseUrl}`, router);

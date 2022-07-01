@@ -53,7 +53,7 @@ const getAllTransactions = async (req, res, next) => {
         if (data.length === 0) {
             throw new Error(`Transaction not found`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data
         });
@@ -70,7 +70,7 @@ const getTransactionById = async (req, res, next) => {
         if (!data) {
             throw new Error(`failed to get Transaction by Id`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data
         })
@@ -86,7 +86,7 @@ const createTransaction = async (req, res, next) => {
         if (!data) {
             throw new Error('failed to create transaction');
         }
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Transaction created successfully',
             data
         })
@@ -116,7 +116,7 @@ const updateTransaction = async (req, res, next) => {
         if (!trx || !product) {
             throw new Error(`Failed to update Transaction`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data: data[1]
         })

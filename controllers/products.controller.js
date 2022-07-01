@@ -35,7 +35,7 @@ const getAllProduct = async (req, res, next) => {
         if (data.length === 0) {
             throw new Error(`products not found`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data
         });
@@ -56,7 +56,7 @@ const getProductById = async (req, res, next) => {
         if (!data) {
             throw new Error(`failed to get Product by Id`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data
         })
@@ -72,7 +72,7 @@ const createProduct = async (req, res, next) => {
         if (!data) {
             throw new Error('failed to create product');
         }
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Product created successfully',
             data
         })
@@ -96,7 +96,7 @@ const updateProduct = async (req, res, next) => {
         if (!data) {
             throw new Error(`Failed to update product`);
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data: data[1]
         })
