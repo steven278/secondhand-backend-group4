@@ -14,9 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models.Profile, {
         foreignKey: 'profile_id'
       })
-      User.belongsTo(models.Role, {
-        foreignKey: 'role_id'
-      })
     }
   }
   User.init({
