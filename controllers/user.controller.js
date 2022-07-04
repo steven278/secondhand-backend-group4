@@ -54,10 +54,18 @@ const loginUser = async (req, res, next) => {
 
 const registUser = async (req, res, next) => {
     try {
-        const getDataRegister = await User.create({
+        const getProfile = await Profile.create({
+            photo: null,
+            name: null,
+            city: null,
+            address: null,
+            phone: null
+        })
+        await User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
+            profile_id: getProfile.id,
             isVerified: false
         })
 
