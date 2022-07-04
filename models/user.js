@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.belongsTo(models.Profile, {
-        foreignKey: 'profile_id'
+        foreignKey: 'profile_id',
       })
     }
   }
@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     profile_id: DataTypes.INTEGER,
     isVerified: DataTypes.BOOLEAN,
-    role_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'User',
