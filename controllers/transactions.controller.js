@@ -81,8 +81,9 @@ const getTransactionById = async (req, res, next) => {
 
 const createTransaction = async (req, res, next) => {
     try {
-        const { buyer_id, product_id, nego_price, price } = req.body;
-        const data = await Product.create({ buyer_id, product_id, nego_price, price });
+        let { buyer_id, product_id, nego_price, price } = req.body;
+        price = null;
+        const data = await Transaction.create({ buyer_id, product_id, nego_price, price });
         if (!data) {
             throw new Error('failed to create transaction');
         }
@@ -105,20 +106,23 @@ const updateTransaction = async (req, res, next) => {
                 returning: true,
             }
         );
+        if (!trx) {
+            throw new Error(`Failed to update Transaction`);
+        }
         const product = await Product.update(
             { isSold: true },
             {
-                where: { id: trx.product_id },
+                where: { id: trx[1].dataValues.product_id },
                 plain: true,
                 returning: true,
             }
         );
-        if (!trx || !product) {
+        if (!product) {
             throw new Error(`Failed to update Transaction`);
         }
         return res.status(200).json({
             status: 'success',
-            data: data[1]
+            data: trx[1]
         })
     } catch (err) {
         next(err);
