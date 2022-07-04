@@ -16,7 +16,6 @@ const uploadPhoto = async (req, res, next) => {
             folder: folderPath,
             resource_type: 'image'
         });
-        console.log(uploadPhoto);
         req.body.photo = uploadPhoto.secure_url;
         next();
     } catch (err) {
