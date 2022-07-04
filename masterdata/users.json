@@ -1,8 +1,9 @@
-[{
-    "email": "arlinggacr83@gmail.com",
-    "password": "bebasaja",
-    "name": "arlingga",
-    "profile_id": 1,
-    "isVerified": true,
-    "role_id": 1
-}]
+[
+    {
+        "email": "arlinggacr83@gmail.com",
+        "password": "bebasaja",
+        "name": "arlingga",
+        "profile_id": 1,
+        "isVerified": true
+    }
+]
