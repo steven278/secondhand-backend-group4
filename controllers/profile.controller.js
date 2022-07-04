@@ -43,6 +43,7 @@ const addProfile = async (req, res, next) => {
             phone: req.body.phone,
             address: req.body.address,
             city: req.body.city,
+            isVerified: true
         })
         if (addProfile) {
             return res.status(201).json({
