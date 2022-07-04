@@ -23,15 +23,16 @@ module.exports = {
       },
       profile_id: {
         allowNull: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Profiles',
+          key: 'id'
+        }
+        // onUpdate: 'CASCADE'
       },
       isVerified: {
         allowNull: false,
         type: Sequelize.BOOLEAN
-      },
-      role_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
