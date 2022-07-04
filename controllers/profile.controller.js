@@ -1,4 +1,7 @@
 const { Profile, User } = require('../models');
+const uploadPhoto = require('../helper/uploadService');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const readProfile = async (req, res) => {
     // get the profile user
@@ -16,12 +19,12 @@ const readProfile = async (req, res) => {
             ]
         });
         if (!profileUser) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 'fail',
                 message: 'Failed to get data'
             })
         } else {
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
                 data: profileUser
             })
@@ -32,7 +35,35 @@ const readProfile = async (req, res) => {
     }
 }
 
+const addProfile = async (req, res, next) => {
+    try {
+        const addProfile = await Profile.create({
+            id: req.user.id,
+            photo: req.body.photo,
+            phone: req.body.phone,
+            address: req.body.address,
+            city: req.body.city,
+        })
+        if (addProfile) {
+            return res.status(201).json({
+                status: 'success',
+                data: addProfile
+            })
+        } else {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'Need all data to be filled'
+            })
+        }
+
+    } catch (err) {
+        next(err);
+    }
+}
+
 const updateProfile = async (req, res, next) => {
+    console.log(req.user)
+    return
     try {
         const updateProfile = await Profile.update({
             address: req.body.address,
@@ -58,7 +89,7 @@ const updateProfile = async (req, res, next) => {
             }]
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             status: "Success Updated data",
             data: clearUpdate
         })
@@ -70,5 +101,6 @@ const updateProfile = async (req, res, next) => {
 
 module.exports = {
     readProfile,
+    addProfile,
     updateProfile
 }
