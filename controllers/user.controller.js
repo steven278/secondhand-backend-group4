@@ -38,11 +38,11 @@ const loginUser = async (req, res, next) => {
 
             const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '3h' });
 
-            res.status(200).json({
+            return res.status(200).json({
                 token: token
             })
         } else {
-            res.status(401).json({
+            return res.status(401).json({
                 message: 'Failed Login'
             })
         }
@@ -54,52 +54,29 @@ const loginUser = async (req, res, next) => {
 
 const registUser = async (req, res, next) => {
     try {
-        const register = await User.create({
+        const getDataRegister = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
-            isVerified: false,
-        })
-        console.log(register)
-        if (register) {
-            await Profile.create({
-                photo: null,
-                phone: null,
-                address: null,
-                city: null,
-            })
-        };
-
-        const clearRegist = await User.findOne({
-            where: {
-                id: register.id
-            },
-            include: [{
-                model: Profile
-            }]
+            isVerified: false
         })
 
-        // console.log(register)
-        // const { email } = req.body;
-        // const greet = `Thank you for registering your account in our website`;
-        // const emailResponse = await transportEmail(email, greet);
-        if (!register) {
-            res.status(404).json({
-                status: 'fail',
-                message: 'cant regist'
-            })
-        } else {
-            res.status(201).json({
-                status: "success",
-                data: clearRegist,
-                // message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
-            });
-        }
+        // console.log(getDataRegister)
+        const { email } = req.body;
+        const greet = `Thank you for registering your account in our website`;
+        const emailResponse = await transportEmail(email, greet);
 
+        return res.status(201).json({
+            status: "success",
+            message: `Email sent to ${emailResponse.accepted.join(',').split(',')}`
+        });
     } catch (err) {
         next(err);
     }
 }
+
+
+
 module.exports = {
     loginUser,
     registUser
