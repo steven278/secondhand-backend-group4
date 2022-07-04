@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'seller_id'
       })
       Product.hasMany(models.Transaction, {
-        foreignKey: 'product_id'
+        foreignKey: 'product_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       })
     }
   }
