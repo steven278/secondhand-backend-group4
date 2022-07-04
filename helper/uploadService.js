@@ -8,18 +8,16 @@ cloudinary.config({
     api_secret: process.env.API_SECRET
 });
 
-
-
 const uploadPhoto = async (req, res, next) => {
     try {
-        const folderPath = `my_data/photo/${req.file.mimetype.split('/')[1]}`;
+        const folderPath = `my-asset/${req.file.mimetype.split('/')[1]}`;
         console.log(req.file.path);
         const uploadPhoto = await cloudinary.uploader.upload(req.file.path, {
             folder: folderPath,
-            resource_type: 'photo'
+            resource_type: 'image'
         });
-        fs.unlinkSync(req.file.path);
-        req.body.video = uploadPhoto.secure_url;
+        console.log(uploadPhoto);
+        req.body.photo = uploadPhoto.secure_url;
         next();
     } catch (err) {
         fs.unlinkSync(req.file.path);
