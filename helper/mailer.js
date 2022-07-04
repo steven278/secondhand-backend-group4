@@ -13,7 +13,6 @@ const mailer = (email, message) => {
         text: message
     }
 
-    console.log(mailOptions);
     transporter = nodemailer.createTransport({
         host: 'smtp-relay.sendinblue.com',
         port: 587,
