@@ -6,10 +6,12 @@ const JwtStrategy = require('passport-jwt').Strategy,
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_KEY;
+opts.passReqToCallback = true;
 
 passport.use(
-    new JwtStrategy(opts, async (jwt_payload, done) => {
+    new JwtStrategy(opts, async (req, jwt_payload, done) => {
         try {
+            console.log(req.params.id)
             if (Date.now() < jwt_payload.exp) {
                 throw new Error('Token Expired');
             } else {
@@ -20,6 +22,9 @@ passport.use(
                     }
                 })
                 delete user.dataValues.password;
+                if (req.params.id != jwt_payload.id) {
+                    throw new Error('Unauthorized')
+                }
                 return done(null, user.dataValues);
             }
         } catch (err) {
