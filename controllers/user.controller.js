@@ -2,6 +2,8 @@ const { User, Profile } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transportEmail = require('../helper/mailer');
+const passValidation = require('password-validator');
+const schema = new passValidation();
 require('dotenv').config();
 
 const loginUser = async (req, res, next) => {
@@ -54,6 +56,20 @@ const loginUser = async (req, res, next) => {
 
 const registUser = async (req, res, next) => {
     try {
+        schema
+            .is().min(8)
+            .is().max(50)
+            .has().uppercase()
+            .has().lowercase()
+
+        const passValid = schema.validate(req.body.password, { details: true })
+
+        if (passValid.length > 0) {
+            return res.status(400).json({
+                status: 'Invalid password',
+                message: passValid
+            })
+        }
         const getProfile = await Profile.create({
             photo: null,
             name: null,
