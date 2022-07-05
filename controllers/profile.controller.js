@@ -1,7 +1,4 @@
 const { Profile, User } = require('../models');
-const uploadPhoto = require('../helper/uploadService');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 const readProfile = async (req, res) => {
     // get the profile user
@@ -35,38 +32,11 @@ const readProfile = async (req, res) => {
     }
 }
 
-const addProfile = async (req, res, next) => {
-    try {
-        const addProfile = await Profile.create({
-            id: req.user.id,
-            photo: req.body.photo,
-            phone: req.body.phone,
-            address: req.body.address,
-            city: req.body.city,
-            isVerified: true
-        })
-        if (addProfile) {
-            return res.status(201).json({
-                status: 'success',
-                data: addProfile
-            })
-        } else {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'Need all data to be filled'
-            })
-        }
-
-    } catch (err) {
-        next(err);
-    }
-}
-
 const updateProfile = async (req, res, next) => {
     console.log(req.user)
-    return
     try {
         const updateProfile = await Profile.update({
+            photo: req.body.photo,
             address: req.body.address,
             city: req.body.city,
             phone: req.body.phone,
@@ -76,6 +46,7 @@ const updateProfile = async (req, res, next) => {
         if (updateProfile) {
             await User.update({
                 name: req.body.name,
+                isVerified: true,
                 updatedAt: new Date()
             }, { where: { id: req.params.id } })
         };
@@ -102,6 +73,5 @@ const updateProfile = async (req, res, next) => {
 
 module.exports = {
     readProfile,
-    addProfile,
     updateProfile
 }
