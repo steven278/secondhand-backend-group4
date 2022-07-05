@@ -22,6 +22,12 @@ router.use((err, req, res, next) => {
             errorName: err.name,
             message: err.message
         });
+    } else if (err.message == 'Unauthorized') {
+        return res.status(403).json({
+            status: 'Unauthorized',
+            errorName: err.name,
+            message: err.message
+        })
     } else if (err.name === 'Error' || err.name === 'TypeError') {
         return res.status(404).json({
             status: 'Not Found',
