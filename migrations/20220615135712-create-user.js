@@ -10,7 +10,8 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
       },
       password: {
         allowNull: false,
@@ -21,16 +22,17 @@ module.exports = {
         type: Sequelize.STRING
       },
       profile_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Profiles',
+          key: 'id'
+        }
+        // onUpdate: 'CASCADE'
       },
       isVerified: {
         allowNull: false,
         type: Sequelize.BOOLEAN
-      },
-      role_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

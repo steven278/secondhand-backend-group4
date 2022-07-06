@@ -9,19 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       photo: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       phone: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       address: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       city: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       createdAt: {

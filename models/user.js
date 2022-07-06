@@ -1,7 +1,8 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -10,11 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasOne(models.Profile, {
-        foreignKey: 'user_id'
-      })
-      User.belongsTo(models.Role, {
-        foreignKey: 'role_id'
+      User.belongsTo(models.Profile, {
+        foreignKey: 'profile_id',
       })
       User.hasMany(models.Product, {
         foreignKey: 'seller_id'
@@ -30,10 +28,19 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     profile_id: DataTypes.INTEGER,
     isVerified: DataTypes.BOOLEAN,
-    role_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'User',
+    hooks: {
+      beforeCreate: async (User, options) => {
+        User.password = await bcrypt.hash(User.password, +process.env.SALT_ROUNDS);
+        return User;
+      },
+      beforeUpdate: async (User, options) => {
+        User.password = await bcrypt.hash(User.password, +process.env.SALT_ROUNDS);
+        return User;
+      }
+    }
   });
   return User;
 };
