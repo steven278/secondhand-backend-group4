@@ -16,9 +16,6 @@ const upload = multer({
         // to indicate if the file should be accepted
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') return cb(null, true);
         // To reject this file pass `false`, like so:
-        // The function should call cb with a boolean
-        // to indicate if the file should be accepted
-        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') return cb(null, true);
         // To reject this file pass false, like so:
         cb(null, false);
         // You can always pass an error if something goes wrong:
