@@ -1,4 +1,5 @@
 const { Product, Category } = require('../models');
+const { Op } = require("sequelize");
 
 const getAllProduct = async (req, res, next) => {
     try {
@@ -33,6 +34,9 @@ const getAllProduct = async (req, res, next) => {
         if (req.query.category) {
             const category = await Category.findOne({ where: { name: req.query.category } });
             options.where = { category_id: category.id };
+        }
+        if (req.query.name) {
+            options.where = { name: { [Op.iLike]: `%${req.query.name}%` } };
         }
         const data = await Product.findAll(options);
         if (data.length === 0) {
