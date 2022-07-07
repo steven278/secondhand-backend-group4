@@ -23,6 +23,8 @@ const getAllTransactions = async (req, res, next) => {
 
         const data = [];
         if (buyer_id) { //get buyer's transactions
+            //check user id and buyer id
+            if (req.user.id != buyer_id) throw new Error('Unauthorized');
             options.where = { buyer_id };
             const transactions = await Transaction.findAll(options);
             for (let i = 0; i < transactions.length; i++) {
@@ -37,6 +39,8 @@ const getAllTransactions = async (req, res, next) => {
             }
             data.push(transactions);
         } else if (seller_id && isSold && trx_price) { // get diminati 
+            //check user id and seller id
+            if (req.user.id != seller_id) throw new Error('Unauthorized');
             const attrOption = trx_price === 'null' ? { [Op.is]: null } : trx_price;
             const products = await Product.findAll({ where: { seller_id, isSold } });
             //find all transactions from all products
@@ -44,7 +48,7 @@ const getAllTransactions = async (req, res, next) => {
                 options.where = { price: attrOption, product_id: product.id };
                 options.attributes = ['buyer_id', 'product_id', 'nego_price', 'price'];
                 const transactions = await Transaction.findAll(options);
-                data.push(transactions);
+                if (transactions.length > 0) data.push(transactions);
             }
         } else { //find all transactions
             const trx = await Transaction.findAll(options);
@@ -82,6 +86,8 @@ const getTransactionById = async (req, res, next) => {
 const createTransaction = async (req, res, next) => {
     try {
         let { buyer_id, product_id, nego_price, price } = req.body;
+        //check user id and seller id
+        if (req.user.id != buyer_id) throw new Error('Unauthorized');
         price = null;
         const data = await Transaction.create({ buyer_id, product_id, nego_price, price });
         if (!data) {
@@ -98,6 +104,11 @@ const createTransaction = async (req, res, next) => {
 
 const updateTransaction = async (req, res, next) => {
     try {
+        //check user id and seller id 
+        const transaction = await Transaction.findOne({ where: { id: req.params.id } });
+        const prod = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        if (req.user.id != prod.dataValues.seller_id) throw new Error('Unauthorized');
+
         const trx = await Transaction.update(
             req.body,
             {

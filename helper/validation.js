@@ -11,7 +11,7 @@ opts.passReqToCallback = true;
 passport.use(
     new JwtStrategy(opts, async (req, jwt_payload, done) => {
         try {
-            console.log(req.params.id)
+            const path = req.baseUrl.split('/')[2];
             if (Date.now() < jwt_payload.exp) {
                 throw new Error('Token Expired');
             } else {
@@ -22,7 +22,7 @@ passport.use(
                     }
                 })
                 delete user.dataValues.password;
-                if (req.params.id != jwt_payload.id) {
+                if (req.params.id != jwt_payload.id && path == 'profile') {
                     throw new Error('Unauthorized')
                 }
                 return done(null, user.dataValues);

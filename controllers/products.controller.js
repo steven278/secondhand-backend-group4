@@ -10,7 +10,6 @@ const getAllProduct = async (req, res, next) => {
         }
         page -= page > 0 ? 1 : 0;
         page *= row;
-
         //query 
         const options = {
             attributes: [
@@ -23,7 +22,11 @@ const getAllProduct = async (req, res, next) => {
 
         //get all sold transaction for a user
         if (req.query.seller_id && req.query.isSold) {
+            if (req.user.id != req.query.seller_id) throw new Error('Unauthorized');
             options.where = { seller_id: req.query.seller_id, isSold: req.query.isSold };
+        } else if (req.query.seller_id) { // get all products for a specific user
+            if (req.user.id != req.query.seller_id) throw new Error('Unauthorized');
+            options.where = { seller_id: req.query.seller_id }
         }
 
         //category filtering
@@ -68,6 +71,8 @@ const getProductById = async (req, res, next) => {
 const createProduct = async (req, res, next) => {
     try {
         const { seller_id, name, price, category_id, description, isSold, photos, isPublished } = req.body;
+        //check user authorization
+        if (req.user.id != seller_id) throw new Error('Unauthorized')
         const data = await Product.create({ seller_id, name, price, category_id, description, isSold, photos, isPublished });
         if (!data) {
             throw new Error('failed to create product');
@@ -84,6 +89,9 @@ const createProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
     try {
         const { name, price, category_id, description, isSold, photos, isPublished } = req.body;
+        // check user id and seller id
+        const product = await Product.findOne({ where: { id: req.params.id } });
+        if (req.user.id != product.dataValues.seller_id) throw new Error('Unauthorized'); // if user id != seller id
         const obj = { name, price, category_id, description, isSold, photos, isPublished };
         const data = await Product.update(
             obj,

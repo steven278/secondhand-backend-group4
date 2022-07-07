@@ -33,7 +33,6 @@ const readProfile = async (req, res) => {
 }
 
 const updateProfile = async (req, res, next) => {
-    console.log(req.user)
     try {
         const updateProfile = await Profile.update({
             photo: req.body.photo,
