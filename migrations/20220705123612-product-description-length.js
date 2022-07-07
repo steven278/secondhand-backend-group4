@@ -9,6 +9,9 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.changeColumn('Products', 'description')
+    await queryInterface.changeColumn('Products', 'description', {
+      allowNull: false,
+      type: Sequelize.STRING
+    })
   }
 };
