@@ -20,6 +20,7 @@
   },
   "homepage": "https://gitlab.com/steven278/secondhand-backend-group4#readme",
   "dependencies": {
+    "all-the-cities": "^3.1.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.30.0",
     "cors": "^2.8.5",

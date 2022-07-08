@@ -3,6 +3,7 @@ const products = require('./product.routes');
 const transactions = require('./transaction.routes');
 const profileRoutes = require('./profile.routes');
 const userRoutes = require('./user.routes');
+const cityRoutes = require('./cities.routes');
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -16,7 +17,7 @@ router.use('/transactions', transactions);
 // Route for controller here
 router.use('/user', userRoutes);
 router.use('/profile', profileRoutes);
-
+router.use('/cities', cityRoutes);
 // End Route for controller here
 
 router.use((err, req, res, next) => {
