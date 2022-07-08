@@ -5,8 +5,7 @@ const { getAllProduct, getProductById, createProduct, updateProduct, deleteProdu
 const { productValidation, productUpdateValidation, validate } = require('../validation/product.validator');
 const passport = require('../helper/validation');
 
-// router.get('/', passport, getAllProduct);
-router.get('/', getAllProduct);
+router.get('/', passport, getAllProduct);
 router.get('/:id', getProductById);
 router.post('/', passport, upload.array('photos', 4), productValidation(), validate, uploadWithCloudinary, createProduct);
 router.put('/:id', passport, upload.array('photos', 4), productUpdateValidation(), validate, uploadWithCloudinary, updateProduct);
