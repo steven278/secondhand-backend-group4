@@ -11,7 +11,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     await queryInterface.changeColumn('Products', 'description', {
       allowNull: false,
-      type: Sequelize.DataTypes.STRING(1500)
+      type: Sequelize.TEXT
     })
   }
 };
