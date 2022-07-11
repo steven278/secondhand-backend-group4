@@ -1,25 +1,29 @@
-const cities = require('all-the-cities');
+const { City } = require('../models');
+const { Op } = require("sequelize");
 
-
-const getAllCities = (req, res, next) => {
+const getAllCities = async (req, res, next) => {
     try {
+        //pagination
+        let { page, row } = req.query;
+        if (row == 0 || !page || !row) {
+            page = 1;
+            row = 5;
+        }
+        page -= page > 0 ? 1 : 0;
+        page *= row;
+        //query 
         const options = {
             attributes: [
-                'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished'
+                'id', 'name'
             ],
             order: [['id', 'ASC']],
             limit: row,
             offset: page,
-        }
-        const data = [];
-        const getCities = cities.filter(city => city.name.match(`ban`));
-        getCities.forEach(city => {
-            if (city.country == 'ID') {
-                // const cityName = city.name;
-
-                data.push(city);
+            where: {
+                name: { [Op.iLike]: `${req.query.city}%` }
             }
-        });
+        }
+        const data = await City.findAll(options);
 
         return res.status(200).json({
             status: 'success',
