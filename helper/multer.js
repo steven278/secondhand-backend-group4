@@ -22,7 +22,7 @@ const upload = multer({
         return cb(new Error('Wrong filetype'));
     },
     limits: {
-        fileSize: 10000000
+        fileSize: 5000000 //5 MB
     }
 });
 
