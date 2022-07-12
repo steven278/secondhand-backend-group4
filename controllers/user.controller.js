@@ -7,6 +7,7 @@ const schema = new passValidation();
 require('dotenv').config();
 
 const loginUser = async (req, res, next) => {
+    console.log('tessssssssssssssssssss');
     // login the user
     try {
         const { email, password } = req.body;
@@ -41,7 +42,8 @@ const loginUser = async (req, res, next) => {
             const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '3h' });
 
             return res.status(200).json({
-                token: token
+                token: token,
+                id: loginUser.id
             })
         } else {
             return res.status(401).json({
