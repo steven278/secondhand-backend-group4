@@ -54,6 +54,8 @@ const getAllTransactions = async (req, res, next) => {
             const trx = await Transaction.findAll(options);
             data.push(trx);
         }
+        //if seller id || issold || trx_price g boleh tampilin semua
+
         if (data.length === 0) {
             throw new Error(`Transaction not found`);
         }

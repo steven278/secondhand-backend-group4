@@ -117,6 +117,32 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
+const publishProduct = async (req, res, next) => {
+    try {
+        // check user id and seller id
+        const product = await Product.findOne({ where: { id: req.params.id } });
+        if (req.user.id != product.dataValues.seller_id) throw new Error('Unauthorized'); // if user id != seller id
+
+        const data = await Product.update(
+            { isPublished: true },
+            {
+                where: { id: req.params.id },
+                plain: true,
+                returning: true,
+            }
+        );
+        if (!data) {
+            throw new Error(`Failed to publish product`);
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'successfully publish product'
+        })
+    } catch (err) {
+        next(err);
+    }
+}
+
 const deleteProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -136,5 +162,6 @@ module.exports = {
     getProductById,
     createProduct,
     updateProduct,
+    publishProduct,
     deleteProduct
 }
