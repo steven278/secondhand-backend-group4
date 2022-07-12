@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const corsOptions = {
-    origin: '*',
+    origin: false,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     preflightContinue: true,
