@@ -10,13 +10,13 @@ const morgan = require('morgan');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
+// app.use(function (req, res, next) {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     next();
+// });
 
 // const corsOptions = {
 //     origin: '*',
@@ -25,7 +25,13 @@ app.use(function (req, res, next) {
 //     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-// app.use(cors({ credentials: true, origin: ['http://localhost:3000', 'http://localhost:5000', ' https://secondhand-group4.herokuapp.com/secondhand', 'https://second-hand-by-group-4.netlify.app'] }));
+app.use(cors({
+    credentials: true,
+    origin: ['http://localhost:3000',
+        'http://localhost:5000',
+        ' https://secondhand-group4.herokuapp.com/secondhand',
+        'https://second-hand-by-group-4.netlify.app']
+}));
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(morgan('dev'));
 
