@@ -21,23 +21,56 @@ const getAllProduct = async (req, res, next) => {
             offset: page,
         }
 
-        //get all sold transaction for a user
-        if (req.query.seller_id && req.query.isSold) {
-            if (req.user.id != req.query.seller_id) throw new Error('Unauthorized');
-            options.where = { seller_id: req.query.seller_id, isSold: req.query.isSold };
-        } else if (req.query.seller_id) { // get all products for a specific user
-            if (req.user.id != req.query.seller_id) throw new Error('Unauthorized');
-            options.where = { seller_id: req.query.seller_id }
-        }
-
         //category filtering
         if (req.query.category) {
             const category = await Category.findOne({ where: { name: req.query.category } });
             options.where = { category_id: category.id };
-        }
-        if (req.query.name) {
+        } else if (req.query.name) {
             options.where = { name: { [Op.iLike]: `%${req.query.name}%` } };
         }
+        const data = await Product.findAll(options);
+        if (data.length === 0) {
+            throw new Error(`products not found`);
+        }
+        return res.status(200).json({
+            status: 'success',
+            data
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+const getAllProductSeller = async (req, res, next) => {
+    try {
+        let { page, row } = req.query;
+        if (row == 0 || !page || !row) {
+            page = 1;
+            row = 5;
+        }
+        page -= page > 0 ? 1 : 0;
+        page *= row;
+        //query 
+        const options = {
+            attributes: [
+                'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished'
+            ],
+            order: [['id', 'ASC']],
+            limit: row,
+            offset: page,
+        }
+
+        if (req.user.id != req.params.id) throw new Error('Unauthorized');
+
+        //get all transaction for a user
+        if (req.params.id && req.query.isSold && req.query.isPublished) {
+            options.where = { seller_id: req.params.id, isSold: req.query.isSold, isPublished: req.query.isPublished };
+        } else if (req.params.id && req.params.isSold) { // get all products for a specific user
+            options.where = { seller_id: req.params.id, isSold: req.query.isSold }
+        } else if (req.params.id && req.params.isPublished) {
+            options.where = { seller_id: req.params.id, isPublished: req.query.isPublished };
+        }
+
         const data = await Product.findAll(options);
         if (data.length === 0) {
             throw new Error(`products not found`);
@@ -159,6 +192,7 @@ const deleteProduct = async (req, res, next) => {
 
 module.exports = {
     getAllProduct,
+    getAllProductSeller,
     getProductById,
     createProduct,
     updateProduct,
