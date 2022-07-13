@@ -1,5 +1,4 @@
-[
-  {
+[{
     "name": "MANOKWARI SELATAN"
   },
   {
@@ -180,7 +179,7 @@
     "name": "LANDAK"
   },
   {
-    "name": "KOTA PONTIANAK"
+    "name": "PONTIANAK"
   },
   {
     "name": "KAYONG UTARA"
@@ -327,7 +326,7 @@
     "name": "KAMPAR"
   },
   {
-    "name": "KOTA PEKANBARU"
+    "name": "PEKANBARU"
   },
   {
     "name": "ROKAN HULU"
@@ -336,7 +335,7 @@
     "name": "MERANTI"
   },
   {
-    "name": "KOTA DUMAI"
+    "name": "DUMAI"
   },
   {
     "name": "PAHUWATO"
@@ -432,7 +431,7 @@
     "name": "KATINGAN"
   },
   {
-    "name": "KOTA PALANGKARAYA"
+    "name": "PALANGKARAYA"
   },
   {
     "name": "SUKAMARA"
@@ -447,7 +446,7 @@
     "name": "TANA TIDUNG"
   },
   {
-    "name": "KOTA TARAKAN"
+    "name": "TARAKAN"
   },
   {
     "name": "MALINAU"
@@ -729,7 +728,7 @@
     "name": "BIMA"
   },
   {
-    "name": "KOTA MATARAM"
+    "name": "MATARAM"
   },
   {
     "name": "SUMBAWA"
@@ -741,7 +740,7 @@
     "name": "LOMBOK TENGAH"
   },
   {
-    "name": "KOTA BIMA"
+    "name": "BIMA"
   },
   {
     "name": "SUMBAWA BARAT"
@@ -873,7 +872,7 @@
     "name": "KARANGASEM"
   },
   {
-    "name": "KOTA DENPASAR"
+    "name": "DENPASAR"
   },
   {
     "name": "TABANAN"
@@ -894,7 +893,7 @@
     "name": "KUTAI TIMUR"
   },
   {
-    "name": "KOTA BONTANG"
+    "name": "BONTANG"
   },
   {
     "name": "BERAU"
@@ -903,13 +902,13 @@
     "name": "PENAJAM PASIR UTARA"
   },
   {
-    "name": "KOTA BALIKPAPAN"
+    "name": "BALIKPAPAN"
   },
   {
     "name": "PASER"
   },
   {
-    "name": "KOTA SAMARINDA"
+    "name": "SAMARINDA"
   },
   {
     "name": "KUTAI BARAT"
@@ -924,7 +923,7 @@
     "name": "SUMBA TIMUR"
   },
   {
-    "name": "KOTA KUPANG"
+    "name": "KUPANG"
   },
   {
     "name": "MALAKA"
@@ -1002,13 +1001,13 @@
     "name": "BALANGAN"
   },
   {
-    "name": "KOTA BANJARBARU"
+    "name": "BANJARBARU"
   },
   {
     "name": "BANJAR"
   },
   {
-    "name": "KOTA BANJARMASIN"
+    "name": "BANJARMASIN"
   },
   {
     "name": "TAPIN"
@@ -1233,7 +1232,7 @@
     "name": "BELITUNG TIMUR"
   },
   {
-    "name": "KOTA PANGKAL PINANG"
+    "name": "PANGKAL PINANG"
   },
   {
     "name": "BEKASI"
@@ -1353,10 +1352,10 @@
     "name": "SOLOK"
   },
   {
-    "name": "KOTA PARIAMAN"
+    "name": "PARIAMAN"
   },
   {
-    "name": "KOTA PADANGPANJANG"
+    "name": "PADANGPANJANG"
   },
   {
     "name": "DHARMASRAYA"
@@ -1374,22 +1373,22 @@
     "name": "PADANG PARIAMAN"
   },
   {
-    "name": "KOTA BUKITTINGGI"
+    "name": "BUKITTINGGI"
   },
   {
-    "name": "KOTA SOLOK"
+    "name": "SOLOK"
   },
   {
-    "name": "KOTA SAWAHLUNTO"
+    "name": "SAWAHLUNTO"
   },
   {
     "name": "SOLOK SELATAN"
   },
   {
-    "name": "KOTA PADANG"
+    "name": "PADANG"
   },
   {
-    "name": "KOTA PAYAKUMBUH"
+    "name": "PAYAKUMBUH"
   },
   {
     "name": "PASAMAN BARAT"
@@ -1407,13 +1406,13 @@
     "name": "NATUNA"
   },
   {
-    "name": "KOTA TANJUNG PINANG"
+    "name": "TANJUNG PINANG"
   },
   {
     "name": "BINTAN"
   },
   {
-    "name": "KOTA BATAM"
+    "name": "BATAM"
   },
   {
     "name": "LINGGA"
