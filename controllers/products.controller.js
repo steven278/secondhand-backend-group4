@@ -69,6 +69,8 @@ const getAllProductSeller = async (req, res, next) => {
             options.where = { seller_id: req.params.id, isSold: req.query.isSold }
         } else if (req.params.id && req.params.isPublished) {
             options.where = { seller_id: req.params.id, isPublished: req.query.isPublished };
+        } else if (req.params.id) {
+            options.where = { seller_id: req.params.id };
         }
 
         const data = await Product.findAll(options);
