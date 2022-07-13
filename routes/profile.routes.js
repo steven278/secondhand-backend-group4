@@ -5,7 +5,8 @@ const { readProfile, updateProfile } = require('../controllers/profile.controlle
 const { upload, uploadProfile } = require('../helper/multer');
 const cloudinary = require('../helper/uploadService');
 
-router.get('/:id', validation, readProfile);
+router.get('/auth/:id', validation, readProfile);
+router.get('/:id', readProfile);
 router.put('/:id', validation, uploadProfile.single('photo'), cloudinary, updateProfile);
 
 module.exports = router;
