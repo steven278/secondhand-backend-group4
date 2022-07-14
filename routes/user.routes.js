@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { loginUser, registUser } = require('../controllers/user.controller');
+const { validationUser, handleValidationErrors } = require('../helper/emailValidation');
 // const cors = require('cors');
 
 // const corsOptions = {
@@ -12,7 +13,7 @@ const { loginUser, registUser } = require('../controllers/user.controller');
 
 // login and register routes
 router.post('/login', loginUser);
-router.post('/regist', registUser);
+router.post('/regist', validationUser(), handleValidationErrors, registUser);
 
 
 // router.get('/:id', readUserDataById);
