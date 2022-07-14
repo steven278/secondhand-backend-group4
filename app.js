@@ -30,7 +30,7 @@ app.use(cors({
         'http://localhost:5000',
         ' https://secondhand-group4.herokuapp.com/secondhand',
         'https://second-hand-by-group-4.netlify.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
 }));
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
