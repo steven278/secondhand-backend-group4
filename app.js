@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({
     origin: ['http://localhost:3000',
         'http://localhost:5000',
-        ' https://secondhand-group4.herokuapp.com/secondhand',
+        ' https://secondhand-group4.herokuapp.com',
         'https://second-hand-by-group-4.netlify.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,

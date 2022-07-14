@@ -34,6 +34,7 @@ const readProfile = async (req, res) => {
 
 const updateProfile = async (req, res, next) => {
     try {
+        console.log('updateProfile controller')
         console.log(req.body);
         const updateProfile = await Profile.update({
             photo: req.body.photo,
