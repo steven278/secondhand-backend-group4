@@ -10,6 +10,7 @@ cloudinary.config({
 
 const uploadPhoto = async (req, res, next) => {
     try {
+        console.log('Upload Serviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         const folderPath = `my-asset/${req.file.mimetype.split('/')[1]}`;
         console.log(req.file.path);
         const uploadPhoto = await cloudinary.uploader.upload(req.file.path, {
@@ -19,7 +20,7 @@ const uploadPhoto = async (req, res, next) => {
         req.body.photo = uploadPhoto.secure_url;
         next();
     } catch (err) {
-        fs.unlinkSync(req.file.path);
+        // fs.unlinkSync(req.file.path);
         console.log(err)
     }
 }
