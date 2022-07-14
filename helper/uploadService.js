@@ -11,8 +11,9 @@ cloudinary.config({
 const uploadPhoto = async (req, res, next) => {
     try {
         console.log('Upload Serviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+        console.log(req.file)
+        console.log(req.body)
         const folderPath = `my-asset/${req.file.mimetype.split('/')[1]}`;
-        console.log(req.file.path);
         const uploadPhoto = await cloudinary.uploader.upload(req.file.path, {
             folder: folderPath,
             resource_type: 'image'
