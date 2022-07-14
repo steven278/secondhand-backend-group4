@@ -7,6 +7,7 @@ const cloudinary = require('../helper/uploadService');
 
 router.get('/auth/:id', validation, readProfile);
 router.get('/:id', readProfile);
+// router.put('/:id', validation, uploadProfile.single('photo'), cloudinary, updateProfile);
 router.put('/:id', validation, uploadProfile.single('photo'), cloudinary, updateProfile);
 
 module.exports = router;
