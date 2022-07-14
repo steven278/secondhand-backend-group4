@@ -87,7 +87,6 @@ const registUser = async (req, res, next) => {
             isVerified: false
         })
 
-        // console.log(getDataRegister)
         const { email } = req.body;
         const greet = `Thank you for registering your account in our website`;
         const emailResponse = await transportEmail(email, greet);
@@ -100,8 +99,6 @@ const registUser = async (req, res, next) => {
         next(err);
     }
 }
-
-
 
 module.exports = {
     loginUser,
