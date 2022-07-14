@@ -26,11 +26,12 @@ app.use(express.urlencoded({ extended: true }))
 // }
 
 app.use(cors({
-    credentials: true,
     origin: ['http://localhost:3000',
         'http://localhost:5000',
         ' https://secondhand-group4.herokuapp.com/secondhand',
-        'https://second-hand-by-group-4.netlify.app']
+        'https://second-hand-by-group-4.netlify.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }));
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(morgan('dev'));
