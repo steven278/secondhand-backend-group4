@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 const fs = require('fs');
+const { Profile } = require('../models');
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -10,9 +11,7 @@ cloudinary.config({
 
 const uploadPhoto = async (req, res, next) => {
     try {
-        console.log('Upload Serviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-        console.log(req.file)
-        console.log(req.body)
+        if (!req.file) next();
         const folderPath = `my-asset/${req.file.mimetype.split('/')[1]}`;
         const uploadPhoto = await cloudinary.uploader.upload(req.file.path, {
             folder: folderPath,
@@ -21,7 +20,6 @@ const uploadPhoto = async (req, res, next) => {
         req.body.photo = uploadPhoto.secure_url;
         next();
     } catch (err) {
-        // fs.unlinkSync(req.file.path);
         console.log(err)
     }
 }
