@@ -9,20 +9,24 @@ cloudinary.config({
 
 const uploadWithCloudinary = async (req, res, next) => {
     try {
-        console.log('cloudinaaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-        console.log(req.files)
-        console.log(req.body)
-        const foldering = `my-asset/${req.files[0].mimetype.split('/')[1]}`;
-        const photos = [];
-        for (const file of req.files) {
-            const uploadResult = await cloudinary.uploader.upload(file.path, {
-                resource_type: "image",
-                folder: foldering
-            });
-            photos.push(uploadResult.secure_url);
+        if (req.files.length < 1) {
+            next();
+        } else {
+            console.log('cloudinaaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+            // console.log(req.files)
+            // console.log(req.body)
+            const foldering = `my-asset/${req.files[0].mimetype.split('/')[1]}`;
+            const photos = [];
+            for (const file of req.files) {
+                const uploadResult = await cloudinary.uploader.upload(file.path, {
+                    resource_type: "image",
+                    folder: foldering
+                });
+                photos.push(uploadResult.secure_url);
+            }
+            req.body.photos = photos;
+            next();
         }
-        req.body.photos = photos;
-        next();
     } catch (err) {
         res.status(200).json({ err: err })
     }

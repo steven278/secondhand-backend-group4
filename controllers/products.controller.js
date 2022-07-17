@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const getAllProduct = async (req, res, next) => {
     try {
         //pagination
-        let { page, row } = req.query;
+        let { page, row, isPublished, isSold } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -20,6 +20,7 @@ const getAllProduct = async (req, res, next) => {
             limit: row,
             offset: page,
         }
+        if (isPublished != undefined && isSold != undefined) options.where = { isPublished, isSold }
 
         //category filtering
         if (req.query.category) {
@@ -116,10 +117,19 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     try {
+        //kalau tdk ada file baru, photos pada body diisi yang lama saja pada formnya
+        // console.log(req.body)
         const { name, price, category_id, description, isSold, photos, isPublished } = req.body;
         // check user id and seller id
         const product = await Product.findOne({ where: { id: req.params.id } });
         if (req.user.id != product.dataValues.seller_id) throw new Error('Unauthorized'); // if user id != seller id
+        // console.log(product.dataValues.photos)
+        // for (let i = 0; i < photos.length; i++) {
+        //     if (product.dataValues.photos != photos[i]){
+
+        //     }
+        // }
+        // console.log(product.dataValues.photos);
         const obj = { name, price, category_id, description, isSold, photos, isPublished };
         const data = await Product.update(
             obj,
