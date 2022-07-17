@@ -11,7 +11,6 @@ opts.passReqToCallback = true;
 passport.use(
     new JwtStrategy(opts, async (req, jwt_payload, done) => {
         try {
-            console.log('passport')
             const path = req.baseUrl.split('/')[2];
             if (Date.now() < jwt_payload.exp) {
                 throw new Error('Token Expired');

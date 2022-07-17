@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const getAllTransactions = async (req, res, next) => {
     try {
-        let { page, row, seller_id, isSold, trx_price, buyer_id } = req.query;
+        let { page, row, buyer_id, product_id } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -22,6 +22,7 @@ const getAllTransactions = async (req, res, next) => {
         }
 
         const data = [];
+        let message = '';
         if (buyer_id) { //get buyer's transactions
             //check user id and buyer id
             if (req.user.id != buyer_id) throw new Error('Unauthorized');
@@ -38,19 +39,34 @@ const getAllTransactions = async (req, res, next) => {
                 }
             }
             data.push(transactions);
-        } else if (seller_id && isSold && trx_price) { // get diminati 
-            //check user id and seller id
-            if (req.user.id != seller_id) throw new Error('Unauthorized');
-            const attrOption = trx_price === 'null' ? { [Op.is]: null } : trx_price;
-            const products = await Product.findAll({ where: { seller_id, isSold } });
-            //find all transactions from all products
-            for (const product of products) {
-                options.where = { price: attrOption, product_id: product.id };
-                options.attributes = ['buyer_id', 'product_id', 'nego_price', 'price'];
-                const transactions = await Transaction.findAll(options);
-                if (transactions.length > 0) data.push(transactions);
+        }
+        else if (product_id) {
+            const transactions = await Transaction.findAll({ where: { product_id, buyer_id: req.user.id } });
+            data.push(transactions.pop());
+            if (transactions.length < 1 || data.accepted == false) {
+                message = 'saya tertarik dan ingin nego';
+            } else if (data.accepted == null) {
+                message = 'menunggu respon penjual';
             }
-        } else { //find all transactions
+            return res.status(200).json({
+                status: 'success',
+                message
+            });
+        }
+        // else if (seller_id && isSold && trx_price) { // get diminati 
+        //     //check user id and seller id
+        //     if (req.user.id != seller_id) throw new Error('Unauthorized');
+        //     const attrOption = trx_price === 'null' ? { [Op.is]: null } : trx_price;
+        //     const products = await Product.findAll({ where: { seller_id, isSold } });
+        //     //find all transactions from all products
+        //     for (const product of products) {
+        //         options.where = { price: attrOption, product_id: product.id };
+        //         options.attributes = ['buyer_id', 'product_id', 'nego_price', 'price'];
+        //         const transactions = await Transaction.findAll(options);
+        //         if (transactions.length > 0) data.push(transactions);
+        //     }
+        // }
+        else { //find all transactions
             const trx = await Transaction.findAll(options);
             data.push(trx);
         }
@@ -91,7 +107,7 @@ const createTransaction = async (req, res, next) => {
         //check user id and seller id
         if (req.user.id != buyer_id) throw new Error('Unauthorized');
         price = null;
-        const data = await Transaction.create({ buyer_id, product_id, nego_price, price });
+        const data = await Transaction.create({ buyer_id, product_id, nego_price, price: null, accepted: null });
         if (!data) {
             throw new Error('failed to create transaction');
         }
@@ -111,28 +127,32 @@ const updateTransaction = async (req, res, next) => {
         const prod = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
         if (req.user.id != prod.dataValues.seller_id) throw new Error('Unauthorized');
 
-        const trx = await Transaction.update(
-            req.body,
-            {
-                where: { id: req.params.id },
-                plain: true,
-                returning: true,
-            }
-        );
-        if (!trx) {
-            throw new Error(`Failed to update Transaction`);
+        const { price, accepted, buyer_id } = req.body;
+        const options = {
+            where: { id: req.params.id },
+            plain: true,
+            returning: true,
         }
-        const product = await Product.update(
-            { isSold: true },
-            {
-                where: { id: trx[1].dataValues.product_id },
-                plain: true,
-                returning: true,
-            }
-        );
-        if (!product) {
-            throw new Error(`Failed to update Transaction`);
+        if (!accepted) {
+            const trx = await Transaction.update({ accepted }, options);
+            if (!trx) throw new Error(`Failed to update Transaction`);
         }
+        else if (accepted && price > 0 && buyer_id) {
+            const trx = await Transaction.update({ accepted, price }, options);
+            if (!trx) throw new Error(`Failed to update Transaction`);
+            const product = await Product.update(
+                { isSold: true, buyer_id },
+                {
+                    where: { id: trx[1].dataValues.product_id },
+                    plain: true,
+                    returning: true,
+                }
+            );
+            if (!product) {
+                throw new Error(`Failed to update Transaction`);
+            }
+        }
+
         return res.status(200).json({
             status: 'success',
             data: trx[1]

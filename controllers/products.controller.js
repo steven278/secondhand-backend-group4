@@ -61,18 +61,7 @@ const getAllProductSeller = async (req, res, next) => {
         }
 
         if (req.user.id != req.params.id) throw new Error('Unauthorized');
-
-        //get all transaction for a user
-        if (req.params.id && req.query.isSold && req.query.isPublished) {
-            options.where = { seller_id: req.params.id, isSold: req.query.isSold, isPublished: req.query.isPublished };
-        } else if (req.params.id && req.params.isSold) { // get all products for a specific user
-            options.where = { seller_id: req.params.id, isSold: req.query.isSold }
-        } else if (req.params.id && req.params.isPublished) {
-            options.where = { seller_id: req.params.id, isPublished: req.query.isPublished };
-        } else if (req.params.id) {
-            options.where = { seller_id: req.params.id };
-        }
-
+        options.where = { seller_id: req.params.id, isSold: req.query.isSold }
         const data = await Product.findAll(options);
         if (data.length === 0) {
             throw new Error(`products not found`);
