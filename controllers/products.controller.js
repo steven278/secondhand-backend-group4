@@ -30,7 +30,7 @@ const getAllProduct = async (req, res, next) => {
         } else if (req.query.name) {
             options.where.name = { [Op.iLike]: `%${req.query.name}%` };
         }
-        console.log(options)
+        // console.log(options)
         const data = await Product.findAll(options);
         if (data.length === 0) {
             throw new Error(`products not found`);
@@ -119,21 +119,27 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     try {
-        //kalau tdk ada file baru, photos pada body diisi yang lama saja pada formnya
-        // console.log(req.body)
-        const { name, price, category_id, description, isSold, photos, isPublished } = req.body;
         // check user id and seller id
         const product = await Product.findOne({ where: { id: req.params.id } });
         if (req.user.id != product.dataValues.seller_id) throw new Error('Unauthorized'); // if user id != seller id
-        // console.log(product.dataValues.photos)
-        const urlPhoto = [];
-        // for (let i = 0; i < photos.length; i++) {
-        //     if (product.dataValues.photos != photos[i]) {
-        //         urlPhoto.push();
-        //     }
-        // }
-        // console.log(product.dataValues.photos);
+
+        //kalau tdk ada file baru, photos pada body diisi yang lama saja pada formnya
+        const { name, price, category_id, description, isSold, isPublished, photos, oldPhotosURL } = req.body;
         const obj = { name, price, category_id, description, isSold, photos, isPublished };
+        //check if there are any photos
+        if (photos == '' || photos == undefined) { //kalau tidak ada fotonya berarti pake link foto yang lama yang dipassing oleh frontend
+            console.log('first')
+            obj.photos = oldPhotosURL.split(',').slice();
+        } else if (oldPhotosURL != '' && photos != '') {//kalau ada foto dan ada link foto lama, maka diupdate mulai dari foto lama , lalu yg baru
+            console.log('second')
+            const tempPhotos = oldPhotosURL.split(',').slice();
+            photos.forEach(photo => {
+                tempPhotos.push(photo);
+            })
+            obj.photos = tempPhotos
+        }
+        // console.log(obj)
+        //selain diatas, maka asumsi semua fotonya baru jadi langsung update
         const data = await Product.update(
             obj,
             {
@@ -142,9 +148,34 @@ const updateProduct = async (req, res, next) => {
                 returning: true,
             }
         );
-        if (!data) {
-            throw new Error(`Failed to update product`);
-        }
+        // console.log(photos)
+        // return
+
+        // let photoURLTemp = [];
+        // if (oldPhotosURL != undefined) {
+        //     photoURLTemp = photoURL.split(',').slice();
+        // }
+        // const newPhotos = [];
+        // for (let i = 0; i < product.dataValues.photos; i++) {
+        //     if (product.dataValues.photos != photoURLTemp[i]) {
+        //         newPhotos.push(photoURLTemp[i]);
+        //     }
+        // }
+
+        // console.log(product.dataValues.photos)
+        // console.log(product.dataValues.photos);
+
+        // const obj = { name, price, category_id, description, isSold, photos, isPublished };
+        // const data = await Product.update(
+        //     obj,
+        //     {
+        //         where: { id: req.params.id },
+        //         plain: true,
+        //         returning: true,
+        //     }
+        // );
+        if (!data) throw new Error(`Failed to update product`);
+
         return res.status(200).json({
             status: 'success',
             data: data[1]
