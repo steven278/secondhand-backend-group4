@@ -21,7 +21,7 @@ const getAllProduct = async (req, res, next) => {
             offset: page,
         }
         if (isPublished != undefined && isSold != undefined) options.where = { isPublished, isSold }
-        if (user_id != undefined) options.where = { seller_id: { [Op.ne]: user_id } }
+        if (user_id != undefined) options.where.seller_id = { [Op.ne]: user_id }
 
         //category filtering
         if (req.query.category) {
