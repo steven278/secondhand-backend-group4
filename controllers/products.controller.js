@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const getAllProduct = async (req, res, next) => {
     try {
         //pagination
-        let { page, row, isPublished, isSold } = req.query;
+        let { page, row, isPublished, isSold, user_id } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -21,6 +21,7 @@ const getAllProduct = async (req, res, next) => {
             offset: page,
         }
         if (isPublished != undefined && isSold != undefined) options.where = { isPublished, isSold }
+        if (user_id != undefined) options.where = { seller_id: { [Op.ne]: user_id } }
 
         //category filtering
         if (req.query.category) {
@@ -124,9 +125,10 @@ const updateProduct = async (req, res, next) => {
         const product = await Product.findOne({ where: { id: req.params.id } });
         if (req.user.id != product.dataValues.seller_id) throw new Error('Unauthorized'); // if user id != seller id
         // console.log(product.dataValues.photos)
+        const urlPhoto = [];
         // for (let i = 0; i < photos.length; i++) {
-        //     if (product.dataValues.photos != photos[i]){
-
+        //     if (product.dataValues.photos != photos[i]) {
+        //         urlPhoto.push();
         //     }
         // }
         // console.log(product.dataValues.photos);
