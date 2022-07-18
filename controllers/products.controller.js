@@ -135,6 +135,7 @@ const updateProduct = async (req, res, next) => {
         } else if (oldPhotosURL != '' && photos != '') {//kalau ada foto dan ada link foto lama, maka diupdate mulai dari foto lama , lalu yg baru
             console.log('second')
             console.log(oldPhotosURL)
+            console.log(typeof oldPhotosURL)
             const tempPhotos = [...oldPhotosURL];
             // const tempPhotos = oldPhotosURL.split(',').slice();
             photos.forEach(photo => {
