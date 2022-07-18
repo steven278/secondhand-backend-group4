@@ -26,10 +26,11 @@ const getAllProduct = async (req, res, next) => {
         //category filtering
         if (req.query.category) {
             const category = await Category.findOne({ where: { name: req.query.category } });
-            options.where = { category_id: category.id };
+            options.where.category_id = category.id
         } else if (req.query.name) {
-            options.where = { name: { [Op.iLike]: `%${req.query.name}%` } };
+            options.where.name = { [Op.iLike]: `%${req.query.name}%` };
         }
+        console.log(options)
         const data = await Product.findAll(options);
         if (data.length === 0) {
             throw new Error(`products not found`);
