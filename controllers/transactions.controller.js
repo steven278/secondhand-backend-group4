@@ -162,9 +162,24 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
+
+const deleteTransaction = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        // console.log(id)
+        await Transaction.destroy({ where: { id } });
+        return res.status(200).json({
+            status: 'success',
+            message: `Trasnsaction with id ${id} deleted successfully`
+        })
+    } catch (err) {
+        next(err);
+    }
+}
 module.exports = {
     getAllTransactions,
     getTransactionById,
     createTransaction,
-    updateTransaction
+    updateTransaction,
+    deleteTransaction
 }
