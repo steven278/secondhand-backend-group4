@@ -4,6 +4,8 @@ const transactions = require('./transaction.routes');
 const profileRoutes = require('./profile.routes');
 const userRoutes = require('./user.routes');
 const cityRoutes = require('./cities.routes');
+const interestRoutes = require('./interests.routes');
+const notifications = require('./notification.routes');
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -18,6 +20,8 @@ router.use('/transactions', transactions);
 router.use('/user', userRoutes);
 router.use('/profile', profileRoutes);
 router.use('/cities', cityRoutes);
+router.use('/interests', interestRoutes);
+router.use('/notifications', notifications);
 // End Route for controller here
 
 router.use((err, req, res, next) => {
