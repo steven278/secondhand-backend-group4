@@ -42,6 +42,14 @@ const updateProfile = async (req, res, next) => {
             updatedAt: new Date()
         }, { where: { id: req.params.id } })
 
+        if (req.body.photo == null) {
+            await Profile.findOne({
+                where: {
+                    id: req.params.id,
+                },
+                attributes: ['photo']
+            })
+        }
         if (updateProfile) {
             await User.update({
                 name: req.body.name,
