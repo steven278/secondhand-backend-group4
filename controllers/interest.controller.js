@@ -28,11 +28,14 @@ const getAllInterest = async (req, res, next) => {
             const transactions = await Transaction.findAll(options);
             if (transactions.length > 0) data.push(product);
         }
+        console.log('berhasilllllllll')
         return res.status(200).json({
             status: 'success',
             data
         });
     } catch (err) {
+        console.log('ada yang error');
+        console.log(err)
         next(err);
     }
 }
