@@ -36,6 +36,16 @@ const updateProfile = async (req, res, next) => {
     try {
         console.log('updateProfile controller')
         console.log(req.body);
+        if (req.body.photo == '') {
+            // console.log('Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            const product = await Profile.findOne({
+                where: {
+                    id: req.params.id,
+                },
+                attributes: ['photo']
+            })
+            req.body.photo = product.dataValues['photo']
+        }
         const updateProfile = await Profile.update({
             photo: req.body.photo,
             address: req.body.address,
