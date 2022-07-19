@@ -34,7 +34,7 @@ const transactionValidation = () => {
 
 const transactionUpdateValidation = () => {
     return [
-        check('price').isNumeric().withMessage('must be a number'),
+        check('price').optional().isNumeric().withMessage('must be a number'),
     ]
 }
 

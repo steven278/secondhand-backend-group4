@@ -41,12 +41,20 @@ const getAllTransactions = async (req, res, next) => {
             data.push(transactions);
         }
         else if (product_id) {
-            const transactions = await Transaction.findAll({ where: { product_id, buyer_id: req.user.id } });
-            data.push(transactions.pop());
-            if (transactions.length < 1 || data.accepted == false) {
-                message = 'saya tertarik dan ingin nego';
-            } else if (data.accepted == null) {
+            options.limit = 1;
+            options.order = [['createdAt', 'DESC']];
+            const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
+            // data.push(transactions.pop());
+            console.log(transactions.dataValues)
+            // if (transactions.length < 1 || data.accepted == false) {
+
+            // } else if (data.accepted == true) {
+            //     // console.log('ffffffffffffffffffffffff')
+            // }
+            if (data.accepted == null) {
                 message = 'menunggu respon penjual';
+            } else {
+                message = 'saya tertarik dan ingin nego';
             }
             return res.status(200).json({
                 status: 'success',
@@ -133,12 +141,16 @@ const updateTransaction = async (req, res, next) => {
             plain: true,
             returning: true,
         }
-        if (!accepted) {
-            const trx = await Transaction.update({ accepted }, options);
+        let trx;
+        if (accepted === 'false') {
+            console.log('tolak di awal')
+            trx = await Transaction.update({ accepted: false }, options);
             if (!trx) throw new Error(`Failed to update Transaction`);
         }
         else if (accepted && price > 0 && buyer_id) {
-            const trx = await Transaction.update({ accepted, price }, options);
+            console.log('ubah jadi terjual')
+            trx = await Transaction.update({ accepted: true, price }, options);
+            console.log(buyer_id);
             if (!trx) throw new Error(`Failed to update Transaction`);
             const product = await Product.update(
                 { isSold: true, buyer_id },
@@ -152,10 +164,15 @@ const updateTransaction = async (req, res, next) => {
                 throw new Error(`Failed to update Transaction`);
             }
         }
+        else if (accepted === 'true') {
+            console.log('terima di awal')
+            trx = await Transaction.update({ accepted: true }, options);
+            if (!trx) throw new Error(`Failed to update Transaction`);
+        }
 
         return res.status(200).json({
             status: 'success',
-            data: trx[1]
+            data: trx[1].dataValues
         })
     } catch (err) {
         next(err);

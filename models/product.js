@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     photos: DataTypes.ARRAY(DataTypes.STRING),
     isSold: DataTypes.BOOLEAN,
-    isPublished: DataTypes.BOOLEAN
+    isPublished: DataTypes.BOOLEAN,
+    buyer_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Product',
