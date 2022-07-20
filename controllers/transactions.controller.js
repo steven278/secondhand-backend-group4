@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const getAllTransactions = async (req, res, next) => {
     try {
-        let { page, row, buyer_id, product_id } = req.query;
+        let { page, row, buyer_id, product_id, isSeller } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -20,10 +20,19 @@ const getAllTransactions = async (req, res, next) => {
             limit: row,
             offset: page
         }
-
         const data = [];
         let message = '';
-        if (buyer_id) { //get buyer's transactions
+
+        if (isSeller) { // nanti
+            options.where = { product_id };
+            const transactions = await Transaction.findAll(options);
+            transactions.forEach(transaction => {
+                if (transaction.dataValues.price == null) {
+                    data.push(transaction.dataValues);
+                }
+            })
+        }
+        else if (buyer_id) { //get buyer's transactions
             //check user id and buyer id
             if (req.user.id != buyer_id) throw new Error('Unauthorized');
             options.where = { buyer_id };
@@ -41,28 +50,29 @@ const getAllTransactions = async (req, res, next) => {
             data.push(transactions);
         }
         else if (product_id) {
-            options.limit = 1;
-            options.order = [['createdAt', 'DESC']];
-            const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
+            // options.limit = 1;
+            // options.order = [['createdAt', 'DESC']];
+            const transactions = await Transaction.findAll({ where: { product_id } });
+            data.push(transactions);
             // data.push(transactions.pop());
             // console.log(transactions.dataValues)
             // console.log(data)
-            data.push(transactions.dataValues)
-            const buyer = await User.findOne({ where: { id: req.user.id } });
-            data.push(buyer.dataValues);
-            const product = await Product.findOne({ where: { id: data[0].product_id } });
-            data.push(product.dataValues);
-            console.log(data);
-            // if (transactions.length < 1 || data.accepted == false) {
+            // data.push(transactions.dataValues)
+            // const buyer = await User.findOne({ where: { id: req.user.id } });
+            // data.push(buyer.dataValues);
+            // const product = await Product.findOne({ where: { id: data[0].product_id } });
+            // data.push(product.dataValues);
+            // console.log(data);
+            // // if (transactions.length < 1 || data.accepted == false) {
 
-            // } else if (data.accepted == true) {
-            //     // console.log('ffffffffffffffffffffffff')
+            // // } else if (data.accepted == true) {
+            // //     // console.log('ffffffffffffffffffffffff')
+            // // }
+            // if (data[0].accepted == null) {
+            //     data[0].message = 1; // menunggu respon penjual
+            // } else {
+            //     data[0].message = 0; //saya tertarik dan ingin nego
             // }
-            if (data[0].accepted == null) {
-                data[0].message = 1; // menunggu respon penjual
-            } else {
-                data[0].message = 0; //saya tertarik dan ingin nego
-            }
             return res.status(200).json({
                 status: 'success',
                 data
@@ -121,7 +131,7 @@ const createTransaction = async (req, res, next) => {
         let { buyer_id, product_id, nego_price, price } = req.body;
         //check user id and seller id
         if (req.user.id != buyer_id) throw new Error('Unauthorized');
-        price = null;
+        //cek sudah terjual / bleum ?
         const data = await Transaction.create({ buyer_id, product_id, nego_price, price: null, accepted: null });
         if (!data) {
             throw new Error('failed to create transaction');
