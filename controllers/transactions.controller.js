@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const getAllTransactions = async (req, res, next) => {
     try {
-        let { page, row, buyer_id, product_id, isSeller } = req.query;
+        let { page, row, buyer_id, product_id, isBuyer } = req.query;
         if (row == 0 || !page || !row) {
             page = 1;
             row = 5;
@@ -23,14 +23,28 @@ const getAllTransactions = async (req, res, next) => {
         const data = [];
         let message = '';
 
-        if (isSeller) { // nanti
-            options.where = { product_id };
-            const transactions = await Transaction.findAll(options);
-            transactions.forEach(transaction => {
-                if (transaction.dataValues.price == null) {
-                    data.push(transaction.dataValues);
-                }
-            })
+        if (isBuyer) { // nanti
+            // options.where = { product_id };
+            // const transactions = await Transaction.findAll(options);
+            // transactions.forEach(transaction => {
+            //     if (transaction.dataValues.price == null) {
+            //         data.push(transaction.dataValues);
+            //     }
+            // })
+            const productTemp = [];
+            options.limit = 1;
+            options.order = [['createdAt', 'DESC']];
+            const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
+            productTemp.push(transactions.dataValues);
+            console.log(productTemp)
+            // const product = await Product.findOne({ where: { id: data[0].product_id } });
+            // data.push(product.dataValues);
+            if (productTemp[0].accepted == null) {
+                productTemp[0].message = 1; // menunggu respon penjual
+            } else {
+                productTemp[0].message = 0; //saya tertarik dan ingin nego
+            }
+            data[0] = { buttonStatus: productTemp[0].message };
         }
         else if (buyer_id) { //get buyer's transactions
             //check user id and buyer id
@@ -50,33 +64,24 @@ const getAllTransactions = async (req, res, next) => {
             data.push(transactions);
         }
         else if (product_id) {
-            // options.limit = 1;
-            // options.order = [['createdAt', 'DESC']];
+
             const transactions = await Transaction.findAll({ where: { product_id } });
             data.push(transactions);
             // data.push(transactions.pop());
             // console.log(transactions.dataValues)
             // console.log(data)
-            // data.push(transactions.dataValues)
+
             // const buyer = await User.findOne({ where: { id: req.user.id } });
             // data.push(buyer.dataValues);
             // const product = await Product.findOne({ where: { id: data[0].product_id } });
-            // data.push(product.dataValues);
+            // 
             // console.log(data);
             // // if (transactions.length < 1 || data.accepted == false) {
 
             // // } else if (data.accepted == true) {
             // //     // console.log('ffffffffffffffffffffffff')
             // // }
-            // if (data[0].accepted == null) {
-            //     data[0].message = 1; // menunggu respon penjual
-            // } else {
-            //     data[0].message = 0; //saya tertarik dan ingin nego
-            // }
-            return res.status(200).json({
-                status: 'success',
-                data
-            });
+
         }
         // else if (seller_id && isSold && trx_price) { // get diminati 
         //     //check user id and seller id
