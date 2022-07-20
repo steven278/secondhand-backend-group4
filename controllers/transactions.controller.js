@@ -24,7 +24,7 @@ const getAllTransactions = async (req, res, next) => {
         let result = '';
         let message = '';
 
-        if (isBuyer) { // nanti
+        if (isBuyer) {
             // options.where = { product_id };
             // const transactions = await Transaction.findAll(options);
             // transactions.forEach(transaction => {
@@ -71,7 +71,8 @@ const getAllTransactions = async (req, res, next) => {
         else if (product_id) {
 
             const transactions = await Transaction.findAll({ where: { product_id } });
-            data.push(transactions);
+            result = transactions
+            // data.push(transactions);
             // data.push(transactions.pop());
             // console.log(transactions.dataValues)
             // console.log(data)
@@ -103,16 +104,18 @@ const getAllTransactions = async (req, res, next) => {
         // }
         else { //find all transactions
             const trx = await Transaction.findAll(options);
-            data.push(trx);
+            result = trx;
+            // data.push(trx);
         }
         //if seller id || issold || trx_price g boleh tampilin semua
         // console.log(result != '');
-        if (data.length === 0 && result == '') {
-            throw new Error(`Transaction not found`);
-        }
+        // if (data.length === 0 && result !== '') {
+        //     throw new Error(`Transaction not found`);
+        // }
         return res.status(200).json({
             status: 'success',
-            data: data.length == 0 ? result : data
+            // data: data.length == 0 ? result : data
+            data: result
         });
     } catch (err) {
         next(err);
