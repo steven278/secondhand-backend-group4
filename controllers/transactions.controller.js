@@ -35,16 +35,20 @@ const getAllTransactions = async (req, res, next) => {
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
             const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
-            productTemp.push(transactions.dataValues);
-            console.log(productTemp)
-            // const product = await Product.findOne({ where: { id: data[0].product_id } });
-            // data.push(product.dataValues);
-            if (productTemp[0].accepted == null) {
-                productTemp[0].message = 1; // menunggu respon penjual
+            if (!transactions) {
+                data[0] = { buttonStatus: 0 }
             } else {
-                productTemp[0].message = 0; //saya tertarik dan ingin nego
+                productTemp.push(transactions.dataValues);
+                console.log(productTemp)
+                // const product = await Product.findOne({ where: { id: data[0].product_id } });
+                // data.push(product.dataValues);
+                if (productTemp[0].accepted == null) {
+                    productTemp[0].message = 1; // menunggu respon penjual
+                } else {
+                    productTemp[0].message = 0; //saya tertarik dan ingin nego
+                }
+                data[0] = { buttonStatus: productTemp[0].message };
             }
-            data[0] = { buttonStatus: productTemp[0].message };
         }
         else if (buyer_id) { //get buyer's transactions
             //check user id and buyer id
@@ -137,6 +141,8 @@ const createTransaction = async (req, res, next) => {
         //check user id and seller id
         if (req.user.id != buyer_id) throw new Error('Unauthorized');
         //cek sudah terjual / bleum ?
+        const product = await Product.findOne({ where: { id: product_id } });
+        if (product.dataValues.isSold == true) throw new Error('product has been sold');
         const data = await Transaction.create({ buyer_id, product_id, nego_price, price: null, accepted: null });
         if (!data) {
             throw new Error('failed to create transaction');
