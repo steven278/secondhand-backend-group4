@@ -21,6 +21,7 @@ const getAllTransactions = async (req, res, next) => {
             offset: page
         }
         const data = [];
+        let result = '';
         let message = '';
 
         if (isBuyer) { // nanti
@@ -36,18 +37,18 @@ const getAllTransactions = async (req, res, next) => {
             options.order = [['createdAt', 'DESC']];
             const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
             if (!transactions) {
-                data[0] = { buttonStatus: 0 }
+                result = { buttonStatus: 0 }
             } else {
                 productTemp.push(transactions.dataValues);
                 console.log(productTemp)
-                // const product = await Product.findOne({ where: { id: data[0].product_id } });
+                // const product = await Product.findOne({ where: { id: result.product_id } });
                 // data.push(product.dataValues);
                 if (productTemp[0].accepted == null) {
                     productTemp[0].message = 1; // menunggu respon penjual
                 } else {
                     productTemp[0].message = 0; //saya tertarik dan ingin nego
                 }
-                data[0] = { buttonStatus: productTemp[0].message };
+                result = { buttonStatus: productTemp[0].message };
             }
         }
         else if (buyer_id) { //get buyer's transactions
@@ -65,7 +66,7 @@ const getAllTransactions = async (req, res, next) => {
                     transactions[i].dataValues.status = 'sedang ditawar'
                 }
             }
-            data.push(transactions);
+            result = transactions
         }
         else if (product_id) {
 
@@ -105,13 +106,13 @@ const getAllTransactions = async (req, res, next) => {
             data.push(trx);
         }
         //if seller id || issold || trx_price g boleh tampilin semua
-
-        if (data.length === 0) {
+        // console.log(result != '');
+        if (data.length === 0 && result == '') {
             throw new Error(`Transaction not found`);
         }
         return res.status(200).json({
             status: 'success',
-            data
+            data: data.length == 0 ? result : data
         });
     } catch (err) {
         next(err);
