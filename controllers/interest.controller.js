@@ -12,7 +12,7 @@ const getAllInterest = async (req, res, next) => {
 
         const options = {
             attributes: [
-                'id', 'buyer_id', 'product_id', 'nego_price', 'price', 'createdAt', 'updatedAt'
+                'id', 'buyer_id', 'product_id', 'nego_price', 'price', 'createdAt', 'updatedAt', 'accepted'
             ],
             order: [['id', 'ASC']],
             limit: row,

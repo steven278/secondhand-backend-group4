@@ -1,4 +1,4 @@
-const { Transaction, Product } = require('../models');
+const { Transaction, Product, User } = require('../models');
 const { Op } = require("sequelize");
 
 
@@ -45,20 +45,27 @@ const getAllTransactions = async (req, res, next) => {
             options.order = [['createdAt', 'DESC']];
             const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
             // data.push(transactions.pop());
-            console.log(transactions.dataValues)
+            // console.log(transactions.dataValues)
+            // console.log(data)
+            data.push(transactions.dataValues)
+            const buyer = await User.findOne({ where: { id: req.user.id } });
+            data.push(buyer.dataValues);
+            const product = await Product.findOne({ where: { id: data[0].product_id } });
+            data.push(product.dataValues);
+            console.log(data);
             // if (transactions.length < 1 || data.accepted == false) {
 
             // } else if (data.accepted == true) {
             //     // console.log('ffffffffffffffffffffffff')
             // }
-            if (data.accepted == null) {
-                message = 'menunggu respon penjual';
+            if (data[0].accepted == null) {
+                data[0].message = 'menunggu respon penjual';
             } else {
-                message = 'saya tertarik dan ingin nego';
+                data[0].message = 'saya tertarik dan ingin nego';
             }
             return res.status(200).json({
                 status: 'success',
-                message
+                data
             });
         }
         // else if (seller_id && isSold && trx_price) { // get diminati 
