@@ -59,9 +59,9 @@ const getAllTransactions = async (req, res, next) => {
             //     // console.log('ffffffffffffffffffffffff')
             // }
             if (data[0].accepted == null) {
-                data[0].message = 'menunggu respon penjual';
+                data[0].message = 1; // menunggu respon penjual
             } else {
-                data[0].message = 'saya tertarik dan ingin nego';
+                data[0].message = 0; //saya tertarik dan ingin nego
             }
             return res.status(200).json({
                 status: 'success',
