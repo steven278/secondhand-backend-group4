@@ -18,11 +18,10 @@ const getAllSellerNotification = async (req, res, next) => {
 
     const products = await Product.findAll(options);
     const notifications = [];
-    // const productsTemp = [];
-    // const transactionsTemp = [];
     let ctr = 0;
     for (const product of products) {
         if (product.dataValues.isPublished) product.dataValues.message = 'Berhasil di terbitkan';
+        product.dataValues.photos = product.dataValues.photos[0];
         notifications.push(product.dataValues);
         // const transactions = await Transaction.findAll({ where: { buyer_id: id, product_id: product.dataValues.id } });
         const transactions = await Transaction.findAll({ where: { product_id: product.dataValues.id } });
@@ -72,8 +71,6 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.price = productInfo.price;
         transaction.dataValues.message = 'Pengajuan nego berhasil';
     }
-    // transactions.forEach(async (transaction) => {
-    // })
     return res.status(200).json({
         status: 'success',
         data: transactions
