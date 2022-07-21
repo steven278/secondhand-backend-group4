@@ -24,7 +24,8 @@ const getAllSellerNotification = async (req, res, next) => {
     for (const product of products) {
         if (product.dataValues.isPublished) product.dataValues.message = 'Berhasil di terbitkan';
         notifications.push(product.dataValues);
-        const transactions = await Transaction.findAll({ where: { buyer_id: id, product_id: product.dataValues.id } });
+        // const transactions = await Transaction.findAll({ where: { buyer_id: id, product_id: product.dataValues.id } });
+        const transactions = await Transaction.findAll({ where: { product_id: product.dataValues.id } });
         for (const transaction of transactions) {
             //get product info
             const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
