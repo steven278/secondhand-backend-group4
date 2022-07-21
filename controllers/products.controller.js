@@ -16,7 +16,7 @@ const getAllProduct = async (req, res, next) => {
             attributes: [
                 'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished'
             ],
-            order: [['id', 'ASC']],
+            order: [['name', 'ASC']],
             limit: row,
             offset: page,
         }
