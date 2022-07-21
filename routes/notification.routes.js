@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const { getAllNotifications } = require('../controllers/notification.controller');
+const { getAllSellerNotification, getAllBuyerNotification } = require('../controllers/notification.controller');
 const passport = require('../helper/validation');
 
-router.get('/', passport, getAllNotifications);
+router.get('/seller', passport, getAllSellerNotification);
+router.get('/buyer', passport, getAllBuyerNotification);
 
 module.exports = router;
