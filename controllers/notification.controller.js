@@ -65,7 +65,11 @@ const getAllBuyerNotification = async (req, res, next) => {
         where: { buyer_id: id }
     }
     const transactions = await Transaction.findAll(options);
-    transactions.forEach(transaction => {
+    transactions.forEach(async (transaction) => {
+        const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        transaction.dataValues.photos = productInfo.photos[0];
+        transaction.dataValues.name = productInfo.name;
+        transaction.dataValues.price = productInfo.price;
         transaction.dataValues.message = 'Pengajuan nego berhasil'
     })
     return res.status(200).json({
