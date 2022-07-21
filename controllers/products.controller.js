@@ -143,7 +143,6 @@ const updateProduct = async (req, res, next) => {
             })
             obj.photos = tempPhotos
         }
-        // console.log(obj)
         //selain diatas, maka asumsi semua fotonya baru jadi langsung update
         const data = await Product.update(
             obj,
@@ -153,32 +152,7 @@ const updateProduct = async (req, res, next) => {
                 returning: true,
             }
         );
-        // console.log(photos)
-        // return
 
-        // let photoURLTemp = [];
-        // if (oldPhotosURL != undefined) {
-        //     photoURLTemp = photoURL.split(',').slice();
-        // }
-        // const newPhotos = [];
-        // for (let i = 0; i < product.dataValues.photos; i++) {
-        //     if (product.dataValues.photos != photoURLTemp[i]) {
-        //         newPhotos.push(photoURLTemp[i]);
-        //     }
-        // }
-
-        // console.log(product.dataValues.photos)
-        // console.log(product.dataValues.photos);
-
-        // const obj = { name, price, category_id, description, isSold, photos, isPublished };
-        // const data = await Product.update(
-        //     obj,
-        //     {
-        //         where: { id: req.params.id },
-        //         plain: true,
-        //         returning: true,
-        //     }
-        // );
         if (!data) throw new Error(`Failed to update product`);
 
         return res.status(200).json({

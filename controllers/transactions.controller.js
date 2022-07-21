@@ -1,7 +1,6 @@
 const { Transaction, Product, User } = require('../models');
 const { Op } = require("sequelize");
 
-
 const getAllTransactions = async (req, res, next) => {
     try {
         let { page, row, buyer_id, product_id, isBuyer } = req.query;
@@ -20,18 +19,9 @@ const getAllTransactions = async (req, res, next) => {
             limit: row,
             offset: page
         }
-        const data = [];
         let result = '';
-        let message = '';
 
-        if (isBuyer) {
-            // options.where = { product_id };
-            // const transactions = await Transaction.findAll(options);
-            // transactions.forEach(transaction => {
-            //     if (transaction.dataValues.price == null) {
-            //         data.push(transaction.dataValues);
-            //     }
-            // })
+        if (isBuyer) { // get button status (from buyer's side)
             const productTemp = [];
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
@@ -40,13 +30,11 @@ const getAllTransactions = async (req, res, next) => {
                 result = { buttonStatus: 0 }
             } else {
                 productTemp.push(transactions.dataValues);
-                console.log(productTemp)
-                // const product = await Product.findOne({ where: { id: result.product_id } });
-                // data.push(product.dataValues);
+                // console.log(productTemp)
                 if (productTemp[0].accepted == null) {
-                    productTemp[0].message = 1; // menunggu respon penjual
+                    productTemp[0].message = 1; // "menunggu respon penjual"
                 } else {
-                    productTemp[0].message = 0; //saya tertarik dan ingin nego
+                    productTemp[0].message = 0; // "saya tertarik dan ingin nego"
                 }
                 result = { buttonStatus: productTemp[0].message };
             }
@@ -69,49 +57,13 @@ const getAllTransactions = async (req, res, next) => {
             result = transactions
         }
         else if (product_id) {
-
             const transactions = await Transaction.findAll({ where: { product_id } });
             result = transactions
-            // data.push(transactions);
-            // data.push(transactions.pop());
-            // console.log(transactions.dataValues)
-            // console.log(data)
-
-            // const buyer = await User.findOne({ where: { id: req.user.id } });
-            // data.push(buyer.dataValues);
-            // const product = await Product.findOne({ where: { id: data[0].product_id } });
-            // 
-            // console.log(data);
-            // // if (transactions.length < 1 || data.accepted == false) {
-
-            // // } else if (data.accepted == true) {
-            // //     // console.log('ffffffffffffffffffffffff')
-            // // }
-
         }
-        // else if (seller_id && isSold && trx_price) { // get diminati 
-        //     //check user id and seller id
-        //     if (req.user.id != seller_id) throw new Error('Unauthorized');
-        //     const attrOption = trx_price === 'null' ? { [Op.is]: null } : trx_price;
-        //     const products = await Product.findAll({ where: { seller_id, isSold } });
-        //     //find all transactions from all products
-        //     for (const product of products) {
-        //         options.where = { price: attrOption, product_id: product.id };
-        //         options.attributes = ['buyer_id', 'product_id', 'nego_price', 'price'];
-        //         const transactions = await Transaction.findAll(options);
-        //         if (transactions.length > 0) data.push(transactions);
-        //     }
-        // }
         else { //find all transactions
             const trx = await Transaction.findAll(options);
             result = trx;
-            // data.push(trx);
         }
-        //if seller id || issold || trx_price g boleh tampilin semua
-        // console.log(result != '');
-        // if (data.length === 0 && result !== '') {
-        //     throw new Error(`Transaction not found`);
-        // }
         return res.status(200).json({
             status: 'success',
             // data: data.length == 0 ? result : data
@@ -215,7 +167,6 @@ const updateTransaction = async (req, res, next) => {
 const deleteTransaction = async (req, res, next) => {
     try {
         const { id } = req.params;
-        // console.log(id)
         await Transaction.destroy({ where: { id } });
         return res.status(200).json({
             status: 'success',

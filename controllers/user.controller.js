@@ -7,7 +7,6 @@ const schema = new passValidation();
 require('dotenv').config();
 
 const loginUser = async (req, res, next) => {
-    console.log('tessssssssssssssssssss');
     // login the user
     try {
         const { email, password } = req.body;

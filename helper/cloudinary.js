@@ -10,13 +10,8 @@ cloudinary.config({
 const uploadWithCloudinary = async (req, res, next) => {
     try {
         if (req.files.length < 1) {
-            console.log('no filesssssssssssssss')
             next();
         } else {
-            console.log('cloudinaaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-            const existingPhotos = req.body.photos
-            // console.log(req.files)
-            // console.log(req.body)
             const foldering = `my-asset/${req.files[0].mimetype.split('/')[1]}`;
             const photos = [];
             for (const file of req.files) {

@@ -39,9 +39,6 @@ const getAllSellerNotification = async (req, res, next) => {
     notifications.sort((prev, next) => {
         return prev.createdAt - next.createdAt
     })
-    // notifications.push(productsTemp);
-    // notifications.push(transactionsTemp);
-
 
     //balikin juga id transaksi untuk di klik trx nya
     return res.status(200).json({
