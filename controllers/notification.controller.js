@@ -96,7 +96,7 @@ const getAllBuyerNotification = async (req, res, next) => {
     options.where.price = { [Op.ne]: null };
     // console.log(options.where)
     const soldTransaction = await Transaction.findAll(options);
-    for (const transaction of failedTransactions) {
+    for (const transaction of soldTransaction) {
         const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
         transaction.dataValues.photos = productInfo.photos[0];
         transaction.dataValues.name = productInfo.name;
