@@ -96,7 +96,7 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.photos = productInfo.photos[0];
         transaction.dataValues.name = productInfo.name;
         transaction.dataValues.price = productInfo.price;
-        transaction.dataValues.message = `Selamat, anda berhasil membeli ${productInfo.name}`;
+        transaction.dataValues.message = `Selamat, pembelian anda berhasil`;
     }
     const data = [...transactions, ...acceptedTransactions, ...failedTransactions, ...soldTransaction];
 
