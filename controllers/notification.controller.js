@@ -1,4 +1,6 @@
 const { Product, Transaction } = require('../models');
+const { Op } = require("sequelize");
+
 const getAllSellerNotification = async (req, res, next) => {
     const { id } = req.user;
     let { page, row } = req.query;
@@ -72,6 +74,7 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.message = 'Pengajuan nego berhasil';
     }
     options.where.accepted = false;
+    // console.log(options)
     const failedTransactions = await Transaction.findAll(options);
     for (const transaction of failedTransactions) {
         const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
@@ -89,9 +92,9 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.price = productInfo.price;
         transaction.dataValues.message = 'Kamu akan segera dihubungi penjual via whatsapp';
     }
-    options.where.price != null;
-    // options.where.price = { [Op.ne]: null };
-    console.log(options.where)
+    // options.where.price != null;
+    options.where.price = { [Op.not]: null };
+    // console.log(options.where)
     const soldTransaction = await Transaction.findAll(options);
     for (const transaction of failedTransactions) {
         const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
