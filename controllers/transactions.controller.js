@@ -25,7 +25,8 @@ const getAllTransactions = async (req, res, next) => {
             const productTemp = [];
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
-            const transactions = await Transaction.findOne({ where: { product_id, buyer_id: req.user.id } });
+            options.where = { product_id, buyer_id: req.user.id }
+            const transactions = await Transaction.findOne(options);
             if (!transactions) {
                 result = { buttonStatus: 0 }
             } else {
