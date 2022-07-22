@@ -25,7 +25,7 @@ const getAllTransactions = async (req, res, next) => {
             // const productTemp = [];
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
-            // options.where = { product_id, buyer_id: req.user.id }
+            options.where = { product_id, buyer_id: req.user.id }
             const transactions = await Transaction.findOne(options);
             console.log('lasjfljklsjlk')
             console.log(transactions);
