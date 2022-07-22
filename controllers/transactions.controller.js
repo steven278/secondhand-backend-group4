@@ -114,6 +114,7 @@ const createTransaction = async (req, res, next) => {
 
 const updateTransaction = async (req, res, next) => {
     try {
+        console.log('masuk updateTransaction');
         //check user id and seller id 
         const transaction = await Transaction.findOne({ where: { id: req.params.id } });
         console.log(transaction.dataValues)
