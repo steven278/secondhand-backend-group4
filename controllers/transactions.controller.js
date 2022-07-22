@@ -116,7 +116,10 @@ const updateTransaction = async (req, res, next) => {
     try {
         //check user id and seller id 
         const transaction = await Transaction.findOne({ where: { id: req.params.id } });
+        console.log(transaction.dataValues)
         const prod = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        console.log(prod.dataValues)
+        console.log(req.user.id == prod.dataValues.seller_id)
         if (req.user.id != prod.dataValues.seller_id) throw new Error('Unauthorized');
 
         const { price, accepted, buyer_id } = req.body;
