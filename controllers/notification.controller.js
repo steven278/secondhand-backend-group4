@@ -71,9 +71,38 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.price = productInfo.price;
         transaction.dataValues.message = 'Pengajuan nego berhasil';
     }
+    options.where.accepted = false;
+    const failedTransactions = await Transaction.findAll(options);
+    for (const transaction of failedTransactions) {
+        const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        transaction.dataValues.photos = productInfo.photos[0];
+        transaction.dataValues.name = productInfo.name;
+        transaction.dataValues.price = productInfo.price;
+        transaction.dataValues.message = 'Nego yang kamu ajukan gagal';
+    }
+    options.where.accepted = true;
+    const acceptedTransactions = await Transaction.findAll(options);
+    for (const transaction of acceptedTransactions) {
+        const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        transaction.dataValues.photos = productInfo.photos[0];
+        transaction.dataValues.name = productInfo.name;
+        transaction.dataValues.price = productInfo.price;
+        transaction.dataValues.message = 'Kamu akan segera dihubungi penjual via whatsapp';
+    }
+    options.where.price != null;
+    const soldTransaction = await Transaction.findAll(options);
+    for (const transaction of failedTransactions) {
+        const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
+        transaction.dataValues.photos = productInfo.photos[0];
+        transaction.dataValues.name = productInfo.name;
+        transaction.dataValues.price = productInfo.price;
+        transaction.dataValues.message = `Selamat, anda berhasil membeli ${productInfo.name}`;
+    }
+    const data = [...transactions, ...acceptedTransactions, ...failedTransactions, ...soldTransaction];
+
     return res.status(200).json({
         status: 'success',
-        data: transactions
+        data
     });
 }
 

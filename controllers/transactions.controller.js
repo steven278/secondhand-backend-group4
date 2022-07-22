@@ -135,7 +135,7 @@ const updateTransaction = async (req, res, next) => {
             trx = await Transaction.update({ accepted: false }, options);
             if (!trx) throw new Error(`Failed to update Transaction`);
         }
-        else if (accepted && price > 0 && buyer_id) {
+        else if (price > 0 && buyer_id) {
             console.log('ubah jadi terjual')
             trx = await Transaction.update({ accepted: true, price }, options);
             console.log(buyer_id);
