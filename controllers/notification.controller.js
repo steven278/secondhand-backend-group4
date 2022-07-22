@@ -93,7 +93,7 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.message = 'Kamu akan segera dihubungi penjual via whatsapp';
     }
     // options.where.price != null;
-    options.where.price = { [Op.not]: null };
+    options.where.price = { [Op.ne]: null };
     // console.log(options.where)
     const soldTransaction = await Transaction.findAll(options);
     for (const transaction of failedTransactions) {
