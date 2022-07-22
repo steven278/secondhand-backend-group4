@@ -13,7 +13,7 @@ const getAllTransactions = async (req, res, next) => {
 
         const options = {
             attributes: [
-                'id', 'buyer_id', 'product_id', 'nego_price', 'price', 'createdAt', 'updatedAt'
+                'id', 'buyer_id', 'product_id', 'nego_price', 'price', 'createdAt', 'updatedAt', 'accepted'
             ],
             order: [['id', 'ASC']],
             limit: row,
@@ -22,22 +22,29 @@ const getAllTransactions = async (req, res, next) => {
         let result = '';
 
         if (isBuyer) { // get button status (from buyer's side)
-            const productTemp = [];
+            // const productTemp = [];
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
-            options.where = { product_id, buyer_id: req.user.id }
+            // options.where = { product_id, buyer_id: req.user.id }
             const transactions = await Transaction.findOne(options);
-            if (!transactions) {
+            console.log('lasjfljklsjlk')
+            console.log(transactions);
+            if (transactions == null) {
+                // console.log('zero')
                 result = { buttonStatus: 0 }
             } else {
-                productTemp.push(transactions.dataValues);
-                // console.log(productTemp)
-                if (productTemp[0].accepted == null) {
-                    productTemp[0].message = 1; // "menunggu respon penjual"
+                console.log('not zero')
+                const productTemp = transactions.dataValues
+                console.log(productTemp)
+
+                if (productTemp.accepted == null) {
+                    // console.log('tunggguuuuu')
+                    productTemp.message = 1; // "menunggu respon penjual"
                 } else {
-                    productTemp[0].message = 0; // "saya tertarik dan ingin nego"
+                    // console.log('saya tertariiiiiiiiiiik')
+                    productTemp.message = 0; // "saya tertarik dan ingin nego"
                 }
-                result = { buttonStatus: productTemp[0].message };
+                result = { buttonStatus: productTemp.message };
             }
         }
         else if (buyer_id) { //get buyer's transactions
