@@ -37,7 +37,7 @@ const getAllTransactions = async (req, res, next) => {
                 const productTemp = transactions.dataValues
                 console.log(productTemp)
 
-                if (productTemp.accepted == null) {
+                if (productTemp.accepted == null || productTemp.accepted == true) { //atau dibuat message = 2 (kamu akan segera dihubungi penjual ??, ceritanya dh di terima cuma blm ubah status)
                     // console.log('tunggguuuuu')
                     productTemp.message = 1; // "menunggu respon penjual"
                 } else {
