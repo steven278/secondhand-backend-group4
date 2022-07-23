@@ -56,7 +56,7 @@ const getAllProductSeller = async (req, res, next) => {
         //query 
         const options = {
             attributes: [
-                'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished'
+                'id', 'seller_id', 'name', 'price', 'category_id', 'description', 'photos', 'isSold', 'isPublished', 'buyer_id'
             ],
             order: [['id', 'ASC']],
             limit: row,
@@ -128,19 +128,26 @@ const updateProduct = async (req, res, next) => {
         const obj = { name, price, category_id, description, isSold, photos, isPublished };
         //check if there are any photos
         if (photos == '' || photos == undefined) { //kalau tidak ada fotonya berarti pake link foto yang lama yang dipassing oleh frontend
-            console.log('first')
-            console.log(oldPhotosURL)
-            obj.photos = oldPhotosURL;
+            console.log('first');
+            // console.log(oldPhotosURL)
+            const oldPhotosURLArr = [];
+            if (typeof oldPhotosURL == 'object') {
+                for (const oldPhoto of oldPhotosURL) {
+                    oldPhotosURLArr.push(oldPhoto);
+                }
+            } else {
+                oldPhotosURLArr.push(oldPhotosURL);
+            }
+            obj.photos = oldPhotosURLArr;
+            // console.log(obj)
             // obj.photos = oldPhotosURL.split(',').slice();
         } else if (oldPhotosURL != '' && photos != '') {//kalau ada foto dan ada link foto lama, maka diupdate mulai dari foto lama , lalu yg baru
             console.log('second')
-            console.log(oldPhotosURL)
-            console.log(typeof oldPhotosURL)
-            const tempPhotos = [...oldPhotosURL];
+            // console.log(oldPhotosURL)
+            // console.log(typeof oldPhotosURL)
+            const tempPhotos = typeof oldPhotosURL == 'object' ? [...oldPhotosURL] : [oldPhotosURL];
             // const tempPhotos = oldPhotosURL.split(',').slice();
-            photos.forEach(photo => {
-                tempPhotos.push(photo);
-            })
+            photos.forEach(photo => { tempPhotos.push(photo) })
             obj.photos = tempPhotos
         }
         //selain diatas, maka asumsi semua fotonya baru jadi langsung update
@@ -152,7 +159,6 @@ const updateProduct = async (req, res, next) => {
                 returning: true,
             }
         );
-
         if (!data) throw new Error(`Failed to update product`);
 
         return res.status(200).json({
