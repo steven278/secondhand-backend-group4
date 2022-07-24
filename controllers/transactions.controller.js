@@ -22,26 +22,17 @@ const getAllTransactions = async (req, res, next) => {
         let result = '';
 
         if (isBuyer) { // get button status (from buyer's side)
-            // const productTemp = [];
             options.limit = 1;
             options.order = [['createdAt', 'DESC']];
             options.where = { product_id, buyer_id: req.user.id }
             const transactions = await Transaction.findOne(options);
-            console.log('lasjfljklsjlk')
-            console.log(transactions);
             if (transactions == null) {
-                // console.log('zero')
                 result = { buttonStatus: 0 }
             } else {
-                console.log('not zero')
                 const productTemp = transactions.dataValues
-                console.log(productTemp)
-
                 if (productTemp.accepted == null || productTemp.accepted == true) { //atau dibuat message = 2 (kamu akan segera dihubungi penjual ??, ceritanya dh di terima cuma blm ubah status)
-                    // console.log('tunggguuuuu')
                     productTemp.message = 1; // "menunggu respon penjual"
                 } else {
-                    // console.log('saya tertariiiiiiiiiiik')
                     productTemp.message = 0; // "saya tertarik dan ingin nego"
                 }
                 result = { buttonStatus: productTemp.message };
@@ -54,11 +45,11 @@ const getAllTransactions = async (req, res, next) => {
             const transactions = await Transaction.findAll(options);
             for (let i = 0; i < transactions.length; i++) {
                 const product = await Product.findOne({ where: { id: transactions[i].product_id } });
-                if (product.isSold && transactions[i].price == null) {
+                if (product.isSold && transactions[i].price == null) { //cek apabila gagal ditawar
                     transactions[i].dataValues.status = 'gagal ditawar'
-                } else if (product.isSold && transactions[i].price != null) {
+                } else if (product.isSold && transactions[i].price != null) { //cek apabila berhasil ditawar
                     transactions[i].dataValues.status = 'berhasil ditawar'
-                } else if (product.isSold == false) {
+                } else if (product.isSold == false) { //cek apabila sedang ditawar
                     transactions[i].dataValues.status = 'sedang ditawar'
                 }
             }
@@ -74,7 +65,6 @@ const getAllTransactions = async (req, res, next) => {
         }
         return res.status(200).json({
             status: 'success',
-            // data: data.length == 0 ? result : data
             data: result
         });
     } catch (err) {
@@ -104,7 +94,7 @@ const createTransaction = async (req, res, next) => {
         let { buyer_id, product_id, nego_price, price } = req.body;
         //check user id and seller id
         if (req.user.id != buyer_id) throw new Error('Unauthorized');
-        //cek sudah terjual / bleum ?
+        //cek sudah terjual / belum ?
         const product = await Product.findOne({ where: { id: product_id } });
         if (product.dataValues.isSold == true) throw new Error('product has been sold');
         const data = await Transaction.create({ buyer_id, product_id, nego_price, price: null, accepted: null });
@@ -123,13 +113,9 @@ const createTransaction = async (req, res, next) => {
 
 const updateTransaction = async (req, res, next) => {
     try {
-        console.log('masuk updateTransaction');
         //check user id and seller id 
         const transaction = await Transaction.findOne({ where: { id: req.params.id } });
-        console.log(transaction.dataValues)
         const prod = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
-        console.log(prod.dataValues)
-        console.log(req.user.id == prod.dataValues.seller_id)
         if (req.user.id != prod.dataValues.seller_id) throw new Error('Unauthorized');
 
         const { price, accepted, buyer_id } = req.body;
@@ -140,15 +126,12 @@ const updateTransaction = async (req, res, next) => {
         }
         let trx;
         if (accepted === 'false') {
-            console.log('tolak di awal')
             trx = await Transaction.update({ accepted: false }, options);
             if (!trx) throw new Error(`Failed to update Transaction`);
             await Notification.create({ product_id: prod.dataValues.id, transaction_id: req.params.id, buyer_id, message: 'Nego yang kamu ajukan gagal' });
         }
         else if (price > 0 && buyer_id) {
-            console.log('ubah jadi terjual')
             trx = await Transaction.update({ accepted: true, price }, options);
-            console.log(buyer_id);
             if (!trx) throw new Error(`Failed to update Transaction`);
             await Notification.create({ product_id: prod.dataValues.id, transaction_id: req.params.id, buyer_id, message: 'Selamat, pembelian anda berhasil' });
             const product = await Product.update(
@@ -164,12 +147,10 @@ const updateTransaction = async (req, res, next) => {
             }
         }
         else if (accepted === 'true') {
-            console.log('terima di awal')
             trx = await Transaction.update({ accepted: true }, options);
             if (!trx) throw new Error(`Failed to update Transaction`);
             await Notification.create({ product_id: prod.dataValues.id, transaction_id: req.params.id, buyer_id, message: 'Kamu akan segera dihubungi penjual via whatsapp' });
         }
-
         return res.status(200).json({
             status: 'success',
             data: trx[1].dataValues

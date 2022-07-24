@@ -27,17 +27,13 @@ const readProfile = async (req, res) => {
             })
         }
     } catch (err) {
-        console.log(err)
         next(err);
     }
 }
 
 const updateProfile = async (req, res, next) => {
     try {
-        console.log('updateProfile controller')
-        console.log(req.body);
         if (req.body.photo == '' || req.body.photo == null || req.body.photo == undefined) {
-            // console.log('Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             const product = await Profile.findOne({
                 where: {
                     id: req.params.id,

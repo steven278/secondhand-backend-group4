@@ -30,7 +30,7 @@ const getAllProduct = async (req, res, next) => {
         } else if (req.query.name) {
             options.where.name = { [Op.iLike]: `%${req.query.name}%` };
         }
-        // console.log(options)
+
         const data = await Product.findAll(options);
         if (data.length === 0) {
             throw new Error(`products not found`);
@@ -62,7 +62,7 @@ const getAllProductSeller = async (req, res, next) => {
             limit: row,
             offset: page,
         }
-
+        //check user authorization
         if (req.user.id != req.params.id) throw new Error('Unauthorized');
         options.where = { seller_id: req.params.id, isSold: req.query.isSold }
         const data = await Product.findAll(options);
@@ -85,7 +85,7 @@ const getProductById = async (req, res, next) => {
         if (req.query.isSold) {
             options.where.isSold = req.query.isSold;
         }
-        console.log(options);
+
         const data = await Product.findOne(options);
         if (!data) {
             throw new Error(`failed to get Product by Id`);
@@ -128,9 +128,6 @@ const updateProduct = async (req, res, next) => {
         const obj = { name, price, category_id, description, isSold, photos, isPublished };
         //check if there are any photos
         if (photos == '' || photos == undefined) { //kalau tidak ada fotonya berarti pake link foto yang lama yang dipassing oleh frontend
-            console.log('first');
-            console.log(oldPhotosURL);
-            // console.log(oldPhotosURL)
             const oldPhotosURLArr = [];
             if (typeof oldPhotosURL == 'object') {
                 for (const oldPhoto of oldPhotosURL) {
@@ -140,17 +137,8 @@ const updateProduct = async (req, res, next) => {
                 oldPhotosURLArr.push(oldPhotosURL);
             }
             obj.photos = oldPhotosURLArr;
-            // console.log(obj)
-            // obj.photos = oldPhotosURL.split(',').slice();
         } else if (oldPhotosURL != '' && photos != '') {//kalau ada foto dan ada link foto lama, maka diupdate mulai dari foto lama , lalu yg baru
-            console.log('second')
-            console.log(photos);
-            console.log('------------------------------------')
-            console.log(oldPhotosURL);
-            // console.log(oldPhotosURL)
-            // console.log(typeof oldPhotosURL)
             const tempPhotos = typeof oldPhotosURL == 'object' ? [...oldPhotosURL] : [oldPhotosURL];
-            // const tempPhotos = oldPhotosURL.split(',').slice();
             photos.forEach(photo => { tempPhotos.push(photo) })
             obj.photos = tempPhotos
         }
@@ -205,7 +193,6 @@ const publishProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log(id)
         await Product.destroy({ where: { id } });
         return res.status(200).json({
             status: 'success',
