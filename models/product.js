@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       })
+      Product.hasMany(models.Notification, {
+        foreignKey: 'product_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      })
     }
   }
   Product.init({

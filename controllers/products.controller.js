@@ -1,4 +1,4 @@
-const { Product, Category } = require('../models');
+const { Product, Category, Notification } = require('../models');
 const { Op } = require("sequelize");
 
 const getAllProduct = async (req, res, next) => {
@@ -188,6 +188,8 @@ const publishProduct = async (req, res, next) => {
                 returning: true,
             }
         );
+        await Notification.create({ product_id: req.params.id, trasnsaction_id: null, buyer_id: null, message: 'Berhasil diterbitkan' });
+
         if (!data) {
             throw new Error(`Failed to publish product`);
         }
