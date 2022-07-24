@@ -129,6 +129,7 @@ const updateProduct = async (req, res, next) => {
         //check if there are any photos
         if (photos == '' || photos == undefined) { //kalau tidak ada fotonya berarti pake link foto yang lama yang dipassing oleh frontend
             console.log('first');
+            console.log(oldPhotosURL);
             // console.log(oldPhotosURL)
             const oldPhotosURLArr = [];
             if (typeof oldPhotosURL == 'object') {
@@ -143,6 +144,9 @@ const updateProduct = async (req, res, next) => {
             // obj.photos = oldPhotosURL.split(',').slice();
         } else if (oldPhotosURL != '' && photos != '') {//kalau ada foto dan ada link foto lama, maka diupdate mulai dari foto lama , lalu yg baru
             console.log('second')
+            console.log(photos);
+            console.log('------------------------------------')
+            console.log(oldPhotosURL);
             // console.log(oldPhotosURL)
             // console.log(typeof oldPhotosURL)
             const tempPhotos = typeof oldPhotosURL == 'object' ? [...oldPhotosURL] : [oldPhotosURL];
