@@ -65,18 +65,6 @@ const getAllBuyerNotification = async (req, res, next) => {
         offset: page,
         where: { buyer_id: id }
     }
-    // const notifications = await Notification.findAll({ where: { buyer_id: id } });
-    // for (const notification of notifications) {
-    //     const productInfo = await Product.findOne({ where: { id: notification.dataValues.product_id } });
-    //     notification.dataValues.id = notification.dataValues.transaction_id;
-    //     notification.dataValues.photos = productInfo.photos[0];
-    //     notification.dataValues.name = productInfo.name;
-    //     notification.dataValues.price = productInfo.price;
-    //     const transaction = await Transaction.findOne({ where: { id: notification.dataValues.transaction_id } });
-    //     notification.dataValues.nego_price = transaction.dataValues.nego_price
-    //     notification.dataValues.accepted = transaction.dataValues.accepted
-    //     delete notification.dataValues.transaction_id;
-    // }
     const transactions = await Transaction.findAll(options);
     for (const transaction of transactions) {
         const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
@@ -86,7 +74,6 @@ const getAllBuyerNotification = async (req, res, next) => {
         transaction.dataValues.message = 'Pengajuan nego berhasil';
     }
     options.where.accepted = false;
-    // console.log(options)
     const failedTransactions = await Transaction.findAll(options);
     for (const transaction of failedTransactions) {
         const productInfo = await Product.findOne({ where: { id: transaction.dataValues.product_id } });
@@ -119,7 +106,7 @@ const getAllBuyerNotification = async (req, res, next) => {
 
     return res.status(200).json({
         status: 'success',
-        data: notifications
+        data
     });
 }
 
