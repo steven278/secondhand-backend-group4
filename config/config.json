@@ -14,10 +14,10 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "clfnfelewfxwrd",
-    "password": "8d675bc499cb90ca2cf27a6e080f91270e820429cbc7fa183416e3414edf4c1f",
-    "database": "d8ab33l3s2d0ru",
-    "host": "ec2-34-225-159-178.compute-1.amazonaws.com",
+    "username": "secondhand_db_nc7m_user",
+    "password": "3VX1lA7bkD7Z3iJBsKqKziky0Es1klNi",
+    "database": "secondhand_db_nc7m",
+    "host": "dpg-cmv6p8ocmk4c73ag0010-a",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
