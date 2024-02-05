@@ -17,7 +17,7 @@
     "username": "secondhand_db_nc7m_user",
     "password": "3VX1lA7bkD7Z3iJBsKqKziky0Es1klNi",
     "database": "secondhand_db_nc7m",
-    "host": "dpg-cmv6p8ocmk4c73ag0010-a",
+    "host": "cmv6p8ocmk4c73ag0010-a.singapore-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
